@@ -20,12 +20,17 @@ const moods: Mood[] = [
   { id: 'neutral', emoji: '😐', label: 'Neutral', color: 'text-gray-600', gradient: 'bg-gradient-neutral' },
 ];
 
-export const MoodLogger = () => {
+interface MoodLoggerProps {
+  onMoodSelect?: (mood: { id: string; label: string }) => void;
+}
+
+export const MoodLogger = ({ onMoodSelect }: MoodLoggerProps) => {
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
   const [intensity, setIntensity] = useState(5);
 
   const handleMoodSelect = (mood: Mood) => {
     setSelectedMood(mood);
+    onMoodSelect?.(mood);
   };
 
   const handleLogMood = () => {
@@ -40,12 +45,6 @@ export const MoodLogger = () => {
     <div className="w-full max-w-md mx-auto space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Music className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            MoodTunes
-          </h1>
-        </div>
         <h2 className="text-xl font-semibold text-foreground">
           How are you feeling?
         </h2>
