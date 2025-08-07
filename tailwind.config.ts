@@ -63,6 +63,24 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-background': 'var(--gradient-background)',
+				'gradient-happy': 'var(--gradient-happy)',
+				'gradient-excited': 'var(--gradient-excited)',
+				'gradient-calm': 'var(--gradient-calm)',
+				'gradient-sad': 'var(--gradient-sad)',
+				'gradient-angry': 'var(--gradient-angry)',
+				'gradient-neutral': 'var(--gradient-neutral)'
+			},
+			boxShadow: {
+				'mood': 'var(--shadow-mood)',
+				'card': 'var(--shadow-card)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)',
+				'spring': 'var(--transition-spring)'
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
