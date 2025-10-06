@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Play, Heart, ExternalLink, RefreshCw } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Play, Heart, ExternalLink, RefreshCw, Search, Volume2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Song {
@@ -207,6 +208,9 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
   const [currentSongs, setCurrentSongs] = useState<Song[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [likedSongsSet, setLikedSongsSet] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState('');
+  const [playingSongId, setPlayingSongId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
 
   const generateRecommendations = () => {
@@ -250,12 +254,61 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
     setLikedSongsSet(newLikedSongsSet);
   };
 
-  const playSong = (song: Song) => {
+  const playSong = async (song: Song) => {
+    // Stop currently playing song if any
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    // If clicking the same song, just stop it
+    if (playingSongId === song.id) {
+      setPlayingSongId(null);
+      return;
+    }
+
+    setPlayingSongId(song.id);
+
+    // Use Web Speech API to announce the song
+    const utterance = new SpeechSynthesisUtterance(
+      `Now playing ${song.title} by ${song.artist}`
+    );
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onend = () => {
+      setPlayingSongId(null);
+    };
+
+    window.speechSynthesis.cancel(); // Cancel any ongoing speech
+    window.speechSynthesis.speak(utterance);
+
     toast({
       title: "Playing song",
-      description: `Now playing: ${song.title} by ${song.artist}`
+      description: `Now playing: ${song.title} by ${song.artist}`,
+      action: (
+        <Button 
+          size="sm" 
+          variant="outline" 
+          onClick={() => {
+            window.speechSynthesis.cancel();
+            setPlayingSongId(null);
+          }}
+        >
+          Stop
+        </Button>
+      ),
     });
   };
+
+  // Filter songs based on search query
+  const filteredSongs = currentSongs.filter(song => 
+    song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    song.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    song.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    song.album.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -307,11 +360,32 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
           {/* Song recommendations */}
           {currentSongs.length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-center">
-                Recommended for you
-              </h3>
+              <div className="flex flex-col gap-4">
+                <h3 className="text-lg font-semibold text-center">
+                  Recommended for you
+                </h3>
+                
+                {/* Search bar */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search songs, artists, genres..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                
+                {filteredSongs.length === 0 && searchQuery && (
+                  <p className="text-center text-muted-foreground">
+                    No songs found matching "{searchQuery}"
+                  </p>
+                )}
+              </div>
+              
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {currentSongs.map((song) => (
+                {filteredSongs.map((song) => (
                   <Card key={song.id} className="group hover:shadow-mood transition-all duration-300 hover:scale-105">
                     <CardContent className="p-4 space-y-3">
                       <div className="space-y-1">
@@ -334,12 +408,21 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                       <div className="flex items-center gap-2 pt-2">
                         <Button 
                           size="sm" 
-                          variant="outline"
+                          variant={playingSongId === song.id ? "default" : "outline"}
                           onClick={() => playSong(song)}
                           className="flex-1"
                         >
-                          <Play className="h-3 w-3 mr-1" />
-                          Play
+                          {playingSongId === song.id ? (
+                            <>
+                              <Volume2 className="h-3 w-3 mr-1 animate-pulse" />
+                              Playing
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-3 w-3 mr-1" />
+                              Play
+                            </>
+                          )}
                         </Button>
                         <Button
                           size="sm"
