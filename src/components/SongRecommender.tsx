@@ -199,12 +199,14 @@ const moodSongs: MoodSongs = {
 
 interface SongRecommenderProps {
   selectedMood?: { id: string; label: string } | null;
+  likedSongs: any[];
+  setLikedSongs: (songs: any[]) => void;
 }
 
-export const SongRecommender = ({ selectedMood }: SongRecommenderProps) => {
+export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: SongRecommenderProps) => {
   const [currentSongs, setCurrentSongs] = useState<Song[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [likedSongs, setLikedSongs] = useState<Set<string>>(new Set());
+  const [likedSongsSet, setLikedSongsSet] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   const generateRecommendations = () => {
@@ -233,13 +235,19 @@ export const SongRecommender = ({ selectedMood }: SongRecommenderProps) => {
   };
 
   const toggleLike = (songId: string) => {
-    const newLikedSongs = new Set(likedSongs);
-    if (newLikedSongs.has(songId)) {
-      newLikedSongs.delete(songId);
+    const newLikedSongsSet = new Set(likedSongsSet);
+    const song = currentSongs.find(s => s.id === songId);
+    
+    if (newLikedSongsSet.has(songId)) {
+      newLikedSongsSet.delete(songId);
+      setLikedSongs(likedSongs.filter(s => s.id !== songId));
     } else {
-      newLikedSongs.add(songId);
+      newLikedSongsSet.add(songId);
+      if (song && selectedMood) {
+        setLikedSongs([...likedSongs, { ...song, mood: selectedMood.label }]);
+      }
     }
-    setLikedSongs(newLikedSongs);
+    setLikedSongsSet(newLikedSongsSet);
   };
 
   const playSong = (song: Song) => {
@@ -337,9 +345,9 @@ export const SongRecommender = ({ selectedMood }: SongRecommenderProps) => {
                           size="sm"
                           variant="outline"
                           onClick={() => toggleLike(song.id)}
-                          className={likedSongs.has(song.id) ? 'text-red-500 border-red-500' : ''}
+                          className={likedSongsSet.has(song.id) ? 'text-red-500 border-red-500' : ''}
                         >
-                          <Heart className={`h-3 w-3 ${likedSongs.has(song.id) ? 'fill-current' : ''}`} />
+                          <Heart className={`h-3 w-3 ${likedSongsSet.has(song.id) ? 'fill-current' : ''}`} />
                         </Button>
                         {song.spotifyUrl && (
                           <Button size="sm" variant="outline" asChild>

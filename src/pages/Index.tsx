@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { MoodLogger } from '@/components/MoodLogger';
 import { SongRecommender } from '@/components/SongRecommender';
+import { PreferenceLearner } from '@/components/PreferenceLearner';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
-import { Music, Heart } from 'lucide-react';
+import { Music, Heart, Brain } from 'lucide-react';
 
 const Index = () => {
-  const [activeModule, setActiveModule] = useState<'mood' | 'songs'>('mood');
+  const [activeModule, setActiveModule] = useState<'mood' | 'songs' | 'preferences'>('mood');
   const [selectedMood, setSelectedMood] = useState<{ id: string; label: string } | null>(null);
+  const [likedSongs, setLikedSongs] = useState<any[]>([]);
 
   return (
     <div className="min-h-screen bg-gradient-background p-4 relative">
@@ -45,6 +47,14 @@ const Index = () => {
             <Music className="h-4 w-4" />
             Song Recommender
           </Button>
+          <Button
+            variant={activeModule === 'preferences' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('preferences')}
+            className="flex items-center gap-2"
+          >
+            <Brain className="h-4 w-4" />
+            Preference Learner
+          </Button>
         </div>
       </div>
 
@@ -52,8 +62,10 @@ const Index = () => {
       <div className="flex justify-center">
         {activeModule === 'mood' ? (
           <MoodLogger onMoodSelect={setSelectedMood} />
+        ) : activeModule === 'songs' ? (
+          <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
         ) : (
-          <SongRecommender selectedMood={selectedMood} />
+          <PreferenceLearner likedSongs={likedSongs} />
         )}
       </div>
     </div>
