@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Music, Heart } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Music, Heart, Search } from 'lucide-react';
 
 interface Mood {
   id: string;
@@ -27,6 +28,12 @@ interface MoodLoggerProps {
 export const MoodLogger = ({ onMoodSelect }: MoodLoggerProps) => {
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
   const [intensity, setIntensity] = useState(5);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filter moods based on search query
+  const filteredMoods = moods.filter(mood => 
+    mood.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleMoodSelect = (mood: Mood) => {
     setSelectedMood(mood);
@@ -55,8 +62,26 @@ export const MoodLogger = ({ onMoodSelect }: MoodLoggerProps) => {
 
       {/* Mood Selection */}
       <Card className="p-6 shadow-card">
+        {/* Search bar */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search moods..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        
+        {filteredMoods.length === 0 && searchQuery && (
+          <p className="text-center text-muted-foreground text-sm mb-6">
+            No moods found matching "{searchQuery}"
+          </p>
+        )}
+        
         <div className="grid grid-cols-3 gap-4 mb-6">
-          {moods.map((mood) => (
+          {filteredMoods.map((mood) => (
             <button
               key={mood.id}
               onClick={() => handleMoodSelect(mood)}

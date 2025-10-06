@@ -49,6 +49,42 @@ const moodSongs: MoodSongs = {
       duration: '3:59',
       genre: 'New Wave',
       matchReason: 'Bright, optimistic sound'
+    },
+    {
+      id: '101',
+      title: 'Happy',
+      artist: 'Pharrell Williams',
+      album: 'G I R L',
+      duration: '3:53',
+      genre: 'Pop',
+      matchReason: 'Pure joy and infectious rhythm'
+    },
+    {
+      id: '102',
+      title: 'Shake It Off',
+      artist: 'Taylor Swift',
+      album: '1989',
+      duration: '3:39',
+      genre: 'Pop',
+      matchReason: 'Carefree attitude and danceable beat'
+    },
+    {
+      id: '103',
+      title: 'September',
+      artist: 'Earth, Wind & Fire',
+      album: 'The Best of Earth, Wind & Fire',
+      duration: '3:35',
+      genre: 'Funk',
+      matchReason: 'Celebratory and uplifting groove'
+    },
+    {
+      id: '104',
+      title: 'Uptown Funk',
+      artist: 'Mark Ronson ft. Bruno Mars',
+      album: 'Uptown Special',
+      duration: '4:30',
+      genre: 'Funk Pop',
+      matchReason: 'High energy and feel-good vibes'
     }
   ],
   excited: [
@@ -78,6 +114,42 @@ const moodSongs: MoodSongs = {
       duration: '3:29',
       genre: 'Rock',
       matchReason: 'Pure excitement and unstoppable energy'
+    },
+    {
+      id: '105',
+      title: 'Eye of the Tiger',
+      artist: 'Survivor',
+      album: 'Eye of the Tiger',
+      duration: '4:05',
+      genre: 'Rock',
+      matchReason: 'Motivating and adrenaline-pumping'
+    },
+    {
+      id: '106',
+      title: 'We Will Rock You',
+      artist: 'Queen',
+      album: 'News of the World',
+      duration: '2:02',
+      genre: 'Rock',
+      matchReason: 'Powerful and energizing anthem'
+    },
+    {
+      id: '107',
+      title: 'Levels',
+      artist: 'Avicii',
+      album: 'Levels',
+      duration: '3:18',
+      genre: 'EDM',
+      matchReason: 'Euphoric build-ups and electric energy'
+    },
+    {
+      id: '108',
+      title: 'Jump',
+      artist: 'Van Halen',
+      album: '1984',
+      duration: '4:04',
+      genre: 'Rock',
+      matchReason: 'High-octane excitement and joy'
     }
   ],
   calm: [
@@ -107,6 +179,42 @@ const moodSongs: MoodSongs = {
       duration: '3:07',
       genre: 'Alternative',
       matchReason: 'Contemplative and serene atmosphere'
+    },
+    {
+      id: '109',
+      title: 'Clair de Lune',
+      artist: 'Claude Debussy',
+      album: 'Suite Bergamasque',
+      duration: '5:00',
+      genre: 'Classical',
+      matchReason: 'Soothing piano and peaceful ambiance'
+    },
+    {
+      id: '110',
+      title: 'Breathe Me',
+      artist: 'Sia',
+      album: 'Colour the Small One',
+      duration: '4:33',
+      genre: 'Alternative',
+      matchReason: 'Soft, introspective, and calming'
+    },
+    {
+      id: '111',
+      title: 'Holocene',
+      artist: 'Bon Iver',
+      album: 'Bon Iver',
+      duration: '5:36',
+      genre: 'Indie Folk',
+      matchReason: 'Ethereal and meditative soundscape'
+    },
+    {
+      id: '112',
+      title: 'Stay',
+      artist: 'Rihanna ft. Mikky Ekko',
+      album: 'Unapologetic',
+      duration: '4:00',
+      genre: 'Pop',
+      matchReason: 'Gentle and emotionally soothing'
     }
   ],
   sad: [
@@ -136,6 +244,42 @@ const moodSongs: MoodSongs = {
       duration: '5:43',
       genre: 'Grunge',
       matchReason: 'Melancholic melody and heartfelt vocals'
+    },
+    {
+      id: '113',
+      title: 'The Night We Met',
+      artist: 'Lord Huron',
+      album: 'Strange Trails',
+      duration: '3:28',
+      genre: 'Indie Folk',
+      matchReason: 'Nostalgic and deeply emotional'
+    },
+    {
+      id: '114',
+      title: 'Say Something',
+      artist: 'A Great Big World & Christina Aguilera',
+      album: 'Is There Anybody Out There?',
+      duration: '3:51',
+      genre: 'Pop Ballad',
+      matchReason: 'Heartbreaking and vulnerable'
+    },
+    {
+      id: '115',
+      title: 'Tears in Heaven',
+      artist: 'Eric Clapton',
+      album: 'Unplugged',
+      duration: '4:32',
+      genre: 'Acoustic Rock',
+      matchReason: 'Deeply moving and sorrowful'
+    },
+    {
+      id: '116',
+      title: 'Fix You',
+      artist: 'Coldplay',
+      album: 'X&Y',
+      duration: '4:54',
+      genre: 'Alternative Rock',
+      matchReason: 'Comforting yet melancholic'
     }
   ],
   angry: [
@@ -165,6 +309,42 @@ const moodSongs: MoodSongs = {
       duration: '5:14',
       genre: 'Rap Metal',
       matchReason: 'Rebellious energy and powerful message'
+    },
+    {
+      id: '117',
+      title: 'Down with the Sickness',
+      artist: 'Disturbed',
+      album: 'The Sickness',
+      duration: '4:38',
+      genre: 'Metal',
+      matchReason: 'Intense aggression and power'
+    },
+    {
+      id: '118',
+      title: 'Last Resort',
+      artist: 'Papa Roach',
+      album: 'Infest',
+      duration: '3:20',
+      genre: 'Nu Metal',
+      matchReason: 'Frustrated energy and raw emotion'
+    },
+    {
+      id: '119',
+      title: 'Freak on a Leash',
+      artist: 'Korn',
+      album: 'Follow the Leader',
+      duration: '4:15',
+      genre: 'Nu Metal',
+      matchReason: 'Dark and aggressive release'
+    },
+    {
+      id: '120',
+      title: 'Chop Suey!',
+      artist: 'System of a Down',
+      album: 'Toxicity',
+      duration: '3:30',
+      genre: 'Alternative Metal',
+      matchReason: 'Chaotic and cathartic energy'
     }
   ],
   neutral: [
@@ -194,6 +374,33 @@ const moodSongs: MoodSongs = {
       duration: '4:08',
       genre: 'Alternative Metal',
       matchReason: 'Reflective and emotionally balanced'
+    },
+    {
+      id: '121',
+      title: 'Life on Mars?',
+      artist: 'David Bowie',
+      album: 'Hunky Dory',
+      duration: '3:48',
+      genre: 'Art Rock',
+      matchReason: 'Thought-provoking and balanced'
+    },
+    {
+      id: '122',
+      title: 'Hotel California',
+      artist: 'Eagles',
+      album: 'Hotel California',
+      duration: '6:30',
+      genre: 'Rock',
+      matchReason: 'Smooth and introspective'
+    },
+    {
+      id: '123',
+      title: 'Everything in Its Right Place',
+      artist: 'Radiohead',
+      album: 'Kid A',
+      duration: '4:11',
+      genre: 'Electronic',
+      matchReason: 'Ambient and neutrally calming'
     }
   ]
 };
