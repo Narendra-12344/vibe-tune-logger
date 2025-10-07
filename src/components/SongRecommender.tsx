@@ -576,11 +576,11 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <Card className="shadow-card">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent">
-            Song Recommender
+          <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent flex items-center justify-center gap-2">
+            🎵 Song Recommender 🎧
           </CardTitle>
           <CardDescription>
-            Get personalized music recommendations based on your current mood
+            🎶 Get personalized music recommendations based on your current mood ✨
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -594,12 +594,12 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
               {isGenerating ? (
                 <>
                   <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
+                  🎵 Generating...
                 </>
               ) : (
                 <>
                   <Play className="mr-2 h-4 w-4" />
-                  Generate Recommendations
+                  🎧 Generate Recommendations
                 </>
               )}
             </Button>
@@ -607,14 +607,14 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
 
           {!selectedMood && (
             <div className="text-center text-muted-foreground">
-              Select a mood from the Mood Logger to get started!
+              😊 Select a mood from the Mood Logger to get started! 🎵
             </div>
           )}
 
           {selectedMood && (
             <div className="text-center">
               <Badge variant="secondary" className="text-sm">
-                Current mood: {selectedMood.label}
+                🎭 Current mood: {selectedMood.label}
               </Badge>
             </div>
           )}
@@ -624,7 +624,7 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
             <div className="space-y-4">
               <div className="flex flex-col gap-4">
                 <h3 className="text-lg font-semibold text-center">
-                  Recommended for you
+                  🎼 Recommended for you 🎸
                 </h3>
                 
                 {/* Search bar */}
@@ -641,7 +641,7 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                 
                 {filteredSongs.length === 0 && searchQuery && (
                   <p className="text-center text-muted-foreground">
-                    No songs found matching "{searchQuery}"
+                    🔍 No songs found matching "{searchQuery}"
                   </p>
                 )}
               </div>
@@ -651,20 +651,27 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                   <Card key={song.id} className="group hover:shadow-mood transition-all duration-300 hover:scale-105">
                     <CardContent className="p-4 space-y-3">
                       <div className="space-y-1">
-                        <h4 className="font-semibold text-sm line-clamp-1">{song.title}</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-1">{song.artist}</p>
-                        <p className="text-xs text-muted-foreground line-clamp-1">{song.album}</p>
+                        <h4 className="font-semibold text-sm line-clamp-1 flex items-center gap-1">
+                          🎵 {song.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground line-clamp-1 flex items-center gap-1">
+                          🎤 {song.artist}
+                        </p>
+                        <p className="text-xs text-muted-foreground line-clamp-1 flex items-center gap-1">
+                          💿 {song.album}
+                        </p>
                       </div>
 
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>{song.duration}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {song.genre}
+                        <span className="flex items-center gap-1">⏱️ {song.duration}</span>
+                        <Badge variant="outline" className="text-xs flex items-center gap-1">
+                          🎸 {song.genre}
                         </Badge>
                       </div>
 
-                      <p className="text-xs text-muted-foreground italic">
-                        {song.matchReason}
+                      <p className="text-xs text-muted-foreground italic flex items-start gap-1">
+                        <span>💡</span>
+                        <span>{song.matchReason}</span>
                       </p>
 
                       <div className="flex items-center gap-2 pt-2">

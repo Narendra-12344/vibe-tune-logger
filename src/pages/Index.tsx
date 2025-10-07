@@ -20,11 +20,11 @@ const Index = () => {
       
       {/* App Title */}
       <div className="text-center pt-8 pb-6">
-        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-          MoodTunes
+        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2 flex items-center justify-center gap-3">
+          🎵 MoodTunes 🎧
         </h1>
         <p className="text-muted-foreground text-lg">
-          Discover music that matches your mood
+          🎶 Discover music that matches your mood ✨
         </p>
       </div>
 
@@ -37,7 +37,7 @@ const Index = () => {
             className="flex items-center gap-2"
           >
             <Heart className="h-4 w-4" />
-            Mood Logger
+            😊 Mood Logger
           </Button>
           <Button
             variant={activeModule === 'songs' ? 'default' : 'ghost'}
@@ -45,7 +45,7 @@ const Index = () => {
             className="flex items-center gap-2"
           >
             <Music className="h-4 w-4" />
-            Song Recommender
+            🎵 Song Recommender
           </Button>
           <Button
             variant={activeModule === 'preferences' ? 'default' : 'ghost'}
@@ -53,7 +53,7 @@ const Index = () => {
             className="flex items-center gap-2"
           >
             <Brain className="h-4 w-4" />
-            Preference Learner
+            🧠 Preference Learner
           </Button>
         </div>
       </div>
