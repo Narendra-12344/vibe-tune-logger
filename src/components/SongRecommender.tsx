@@ -14,6 +14,7 @@ interface Song {
   duration: string;
   genre: string;
   spotifyUrl?: string;
+  audioPreviewUrl?: string;
   matchReason: string;
 }
 
@@ -30,6 +31,7 @@ const moodSongs: MoodSongs = {
       album: 'Cuz I Love You',
       duration: '2:39',
       genre: 'Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       matchReason: 'Upbeat tempo and positive lyrics'
     },
     {
@@ -39,6 +41,7 @@ const moodSongs: MoodSongs = {
       album: 'Trolls',
       duration: '3:56',
       genre: 'Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       matchReason: 'Feel-good energy and catchy rhythm'
     },
     {
@@ -48,6 +51,7 @@ const moodSongs: MoodSongs = {
       album: 'Walking on Sunshine',
       duration: '3:59',
       genre: 'New Wave',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
       matchReason: 'Bright, optimistic sound'
     },
     {
@@ -57,6 +61,7 @@ const moodSongs: MoodSongs = {
       album: 'G I R L',
       duration: '3:53',
       genre: 'Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Pure joy and infectious rhythm'
     },
     {
@@ -66,6 +71,7 @@ const moodSongs: MoodSongs = {
       album: '1989',
       duration: '3:39',
       genre: 'Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
       matchReason: 'Carefree attitude and danceable beat'
     },
     {
@@ -75,6 +81,7 @@ const moodSongs: MoodSongs = {
       album: 'The Best of Earth, Wind & Fire',
       duration: '3:35',
       genre: 'Funk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
       matchReason: 'Celebratory and uplifting groove'
     },
     {
@@ -84,6 +91,7 @@ const moodSongs: MoodSongs = {
       album: 'Uptown Special',
       duration: '4:30',
       genre: 'Funk Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'High energy and feel-good vibes'
     }
   ],
@@ -95,6 +103,7 @@ const moodSongs: MoodSongs = {
       album: 'Evolve',
       duration: '3:07',
       genre: 'Pop Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       matchReason: 'High energy and driving beat'
     },
     {
@@ -104,6 +113,7 @@ const moodSongs: MoodSongs = {
       album: 'Monkey Business',
       duration: '3:33',
       genre: 'Hip Hop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
       matchReason: 'Explosive energy and party vibe'
     },
     {
@@ -113,6 +123,7 @@ const moodSongs: MoodSongs = {
       album: 'Jazz',
       duration: '3:29',
       genre: 'Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
       matchReason: 'Pure excitement and unstoppable energy'
     },
     {
@@ -122,6 +133,7 @@ const moodSongs: MoodSongs = {
       album: 'Eye of the Tiger',
       duration: '4:05',
       genre: 'Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
       matchReason: 'Motivating and adrenaline-pumping'
     },
     {
@@ -131,6 +143,7 @@ const moodSongs: MoodSongs = {
       album: 'News of the World',
       duration: '2:02',
       genre: 'Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
       matchReason: 'Powerful and energizing anthem'
     },
     {
@@ -140,6 +153,7 @@ const moodSongs: MoodSongs = {
       album: 'Levels',
       duration: '3:18',
       genre: 'EDM',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
       matchReason: 'Euphoric build-ups and electric energy'
     },
     {
@@ -149,6 +163,7 @@ const moodSongs: MoodSongs = {
       album: '1984',
       duration: '4:04',
       genre: 'Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
       matchReason: 'High-octane excitement and joy'
     }
   ],
@@ -160,6 +175,7 @@ const moodSongs: MoodSongs = {
       album: 'Weightless',
       duration: '8:10',
       genre: 'Ambient',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       matchReason: 'Scientifically designed to reduce anxiety'
     },
     {
@@ -169,6 +185,7 @@ const moodSongs: MoodSongs = {
       album: 'Coming Home',
       duration: '4:17',
       genre: 'Soul',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       matchReason: 'Gentle vocals and peaceful melody'
     },
     {
@@ -178,6 +195,7 @@ const moodSongs: MoodSongs = {
       album: 'Trading Snakeoil for Wolftickets',
       duration: '3:07',
       genre: 'Alternative',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
       matchReason: 'Contemplative and serene atmosphere'
     },
     {
@@ -187,6 +205,7 @@ const moodSongs: MoodSongs = {
       album: 'Suite Bergamasque',
       duration: '5:00',
       genre: 'Classical',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Soothing piano and peaceful ambiance'
     },
     {
@@ -196,6 +215,7 @@ const moodSongs: MoodSongs = {
       album: 'Colour the Small One',
       duration: '4:33',
       genre: 'Alternative',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
       matchReason: 'Soft, introspective, and calming'
     },
     {
@@ -205,6 +225,7 @@ const moodSongs: MoodSongs = {
       album: 'Bon Iver',
       duration: '5:36',
       genre: 'Indie Folk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
       matchReason: 'Ethereal and meditative soundscape'
     },
     {
@@ -214,6 +235,7 @@ const moodSongs: MoodSongs = {
       album: 'Unapologetic',
       duration: '4:00',
       genre: 'Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'Gentle and emotionally soothing'
     }
   ],
@@ -225,6 +247,7 @@ const moodSongs: MoodSongs = {
       album: '21',
       duration: '4:45',
       genre: 'Soul',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       matchReason: 'Emotional depth and cathartic release'
     },
     {
@@ -234,6 +257,7 @@ const moodSongs: MoodSongs = {
       album: 'American IV: The Man Comes Around',
       duration: '3:38',
       genre: 'Country',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
       matchReason: 'Raw emotion and introspective lyrics'
     },
     {
@@ -243,6 +267,7 @@ const moodSongs: MoodSongs = {
       album: 'Ten',
       duration: '5:43',
       genre: 'Grunge',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
       matchReason: 'Melancholic melody and heartfelt vocals'
     },
     {
@@ -252,6 +277,7 @@ const moodSongs: MoodSongs = {
       album: 'Strange Trails',
       duration: '3:28',
       genre: 'Indie Folk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
       matchReason: 'Nostalgic and deeply emotional'
     },
     {
@@ -261,6 +287,7 @@ const moodSongs: MoodSongs = {
       album: 'Is There Anybody Out There?',
       duration: '3:51',
       genre: 'Pop Ballad',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
       matchReason: 'Heartbreaking and vulnerable'
     },
     {
@@ -270,6 +297,7 @@ const moodSongs: MoodSongs = {
       album: 'Unplugged',
       duration: '4:32',
       genre: 'Acoustic Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
       matchReason: 'Deeply moving and sorrowful'
     },
     {
@@ -279,6 +307,7 @@ const moodSongs: MoodSongs = {
       album: 'X&Y',
       duration: '4:54',
       genre: 'Alternative Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
       matchReason: 'Comforting yet melancholic'
     }
   ],
@@ -290,6 +319,7 @@ const moodSongs: MoodSongs = {
       album: 'Sinner',
       duration: '3:22',
       genre: 'Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       matchReason: 'Aggressive energy for emotional release'
     },
     {
@@ -299,6 +329,7 @@ const moodSongs: MoodSongs = {
       album: 'Significant Other',
       duration: '2:47',
       genre: 'Nu Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       matchReason: 'Raw anger and cathartic expression'
     },
     {
@@ -308,6 +339,7 @@ const moodSongs: MoodSongs = {
       album: 'Rage Against the Machine',
       duration: '5:14',
       genre: 'Rap Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
       matchReason: 'Rebellious energy and powerful message'
     },
     {
@@ -317,6 +349,7 @@ const moodSongs: MoodSongs = {
       album: 'The Sickness',
       duration: '4:38',
       genre: 'Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Intense aggression and power'
     },
     {
@@ -326,6 +359,7 @@ const moodSongs: MoodSongs = {
       album: 'Infest',
       duration: '3:20',
       genre: 'Nu Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
       matchReason: 'Frustrated energy and raw emotion'
     },
     {
@@ -335,6 +369,7 @@ const moodSongs: MoodSongs = {
       album: 'Follow the Leader',
       duration: '4:15',
       genre: 'Nu Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
       matchReason: 'Dark and aggressive release'
     },
     {
@@ -344,6 +379,7 @@ const moodSongs: MoodSongs = {
       album: 'Toxicity',
       duration: '3:30',
       genre: 'Alternative Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'Chaotic and cathartic energy'
     }
   ],
@@ -355,6 +391,7 @@ const moodSongs: MoodSongs = {
       album: 'The Dark Side of the Moon',
       duration: '2:43',
       genre: 'Progressive Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       matchReason: 'Balanced and contemplative'
     },
     {
@@ -364,6 +401,7 @@ const moodSongs: MoodSongs = {
       album: 'Stand!',
       duration: '2:24',
       genre: 'Funk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
       matchReason: 'Steady groove and universal appeal'
     },
     {
@@ -373,6 +411,7 @@ const moodSongs: MoodSongs = {
       album: 'Immortalized',
       duration: '4:08',
       genre: 'Alternative Metal',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
       matchReason: 'Reflective and emotionally balanced'
     },
     {
@@ -382,6 +421,7 @@ const moodSongs: MoodSongs = {
       album: 'Hunky Dory',
       duration: '3:48',
       genre: 'Art Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
       matchReason: 'Thought-provoking and balanced'
     },
     {
@@ -391,6 +431,7 @@ const moodSongs: MoodSongs = {
       album: 'Hotel California',
       duration: '6:30',
       genre: 'Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
       matchReason: 'Smooth and introspective'
     },
     {
@@ -400,6 +441,7 @@ const moodSongs: MoodSongs = {
       album: 'Kid A',
       duration: '4:11',
       genre: 'Electronic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
       matchReason: 'Ambient and neutrally calming'
     }
   ]
@@ -474,39 +516,52 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
       return;
     }
 
+    // Check if song has audio preview URL
+    if (!song.audioPreviewUrl) {
+      toast({
+        title: "Preview not available",
+        description: "This song doesn't have an audio preview yet.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setPlayingSongId(song.id);
 
-    // Use Web Speech API to announce the song
-    const utterance = new SpeechSynthesisUtterance(
-      `Now playing ${song.title} by ${song.artist}`
-    );
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
+    // Create and play audio
+    const audio = new Audio(song.audioPreviewUrl);
+    audioRef.current = audio;
 
-    utterance.onend = () => {
+    audio.onended = () => {
       setPlayingSongId(null);
+      audioRef.current = null;
     };
 
-    window.speechSynthesis.cancel(); // Cancel any ongoing speech
-    window.speechSynthesis.speak(utterance);
+    audio.onerror = () => {
+      setPlayingSongId(null);
+      audioRef.current = null;
+      toast({
+        title: "Playback error",
+        description: "Could not play this song. Please try another.",
+        variant: "destructive"
+      });
+    };
 
-    toast({
-      title: "Playing song",
-      description: `Now playing: ${song.title} by ${song.artist}`,
-      action: (
-        <Button 
-          size="sm" 
-          variant="outline" 
-          onClick={() => {
-            window.speechSynthesis.cancel();
-            setPlayingSongId(null);
-          }}
-        >
-          Stop
-        </Button>
-      ),
-    });
+    try {
+      await audio.play();
+      toast({
+        title: "Now playing",
+        description: `${song.title} by ${song.artist}`,
+      });
+    } catch (error) {
+      setPlayingSongId(null);
+      audioRef.current = null;
+      toast({
+        title: "Playback error",
+        description: "Could not play this song. Please try another.",
+        variant: "destructive"
+      });
+    }
   };
 
   // Filter songs based on search query
