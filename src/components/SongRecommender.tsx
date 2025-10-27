@@ -1,10 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Play, Heart, ExternalLink, RefreshCw, Search, Volume2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { toast as sonnerToast } from 'sonner';
 
 interface Song {
   id: string;
@@ -462,6 +464,27 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
 
+  // Load liked songs from database on mount
+  useEffect(() => {
+    loadLikedSongs();
+  }, []);
+
+  const loadLikedSongs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('liked_songs')
+        .select('*');
+
+      if (error) throw error;
+      
+      const songIds = new Set(data?.map(s => s.song_id) || []);
+      setLikedSongsSet(songIds);
+      setLikedSongs(data || []);
+    } catch (error: any) {
+      console.error('Error loading liked songs:', error);
+    }
+  };
+
   const generateRecommendations = () => {
     if (!selectedMood) {
       toast({
@@ -487,20 +510,63 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
     }, 1500);
   };
 
-  const toggleLike = (songId: string) => {
-    const newLikedSongsSet = new Set(likedSongsSet);
+  const toggleLike = async (songId: string) => {
     const song = currentSongs.find(s => s.id === songId);
-    
-    if (newLikedSongsSet.has(songId)) {
-      newLikedSongsSet.delete(songId);
-      setLikedSongs(likedSongs.filter(s => s.id !== songId));
-    } else {
-      newLikedSongsSet.add(songId);
-      if (song && selectedMood) {
-        setLikedSongs([...likedSongs, { ...song, mood: selectedMood.label }]);
+    if (!song) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        sonnerToast.error('Please login to like songs');
+        return;
       }
+
+      const newLikedSongsSet = new Set(likedSongsSet);
+      
+      if (newLikedSongsSet.has(songId)) {
+        // Unlike the song
+        newLikedSongsSet.delete(songId);
+        
+        const { error } = await supabase
+          .from('liked_songs')
+          .delete()
+          .eq('song_id', songId)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+        
+        setLikedSongs(likedSongs.filter(s => s.song_id !== songId));
+        sonnerToast.success('💔 Removed from favorites');
+      } else {
+        // Like the song
+        newLikedSongsSet.add(songId);
+        
+        const { error } = await supabase
+          .from('liked_songs')
+          .insert({
+            user_id: user.id,
+            song_id: songId,
+            title: song.title,
+            artist: song.artist,
+            mood_id: selectedMood?.id || 'neutral'
+          });
+
+        if (error) throw error;
+        
+        setLikedSongs([...likedSongs, { 
+          song_id: songId,
+          title: song.title,
+          artist: song.artist,
+          mood_id: selectedMood?.id || 'neutral'
+        }]);
+        sonnerToast.success('❤️ Added to favorites!');
+      }
+      
+      setLikedSongsSet(newLikedSongsSet);
+    } catch (error: any) {
+      console.error('Error toggling like:', error);
+      sonnerToast.error('Failed to update favorites');
     }
-    setLikedSongsSet(newLikedSongsSet);
   };
 
   const playSong = async (song: Song) => {

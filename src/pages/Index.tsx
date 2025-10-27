@@ -1,15 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { MoodLogger } from '@/components/MoodLogger';
 import { SongRecommender } from '@/components/SongRecommender';
 import { PreferenceLearner } from '@/components/PreferenceLearner';
+import { MoodHistory } from '@/components/MoodHistory';
+import { MoodJournal } from '@/components/MoodJournal';
+import { PlaylistManager } from '@/components/PlaylistManager';
+import { UserProfile } from '@/components/UserProfile';
+import { SongSearch } from '@/components/SongSearch';
+import { Statistics } from '@/components/Statistics';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
-import { Music, Heart, Brain } from 'lucide-react';
+import { Music, Heart, Brain, Calendar, BookOpen, List, User, Search, BarChart3 } from 'lucide-react';
+
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats';
 
 const Index = () => {
-  const [activeModule, setActiveModule] = useState<'mood' | 'songs' | 'preferences'>('mood');
+  const [activeModule, setActiveModule] = useState<ModuleType>('mood');
   const [selectedMood, setSelectedMood] = useState<{ id: string; label: string } | null>(null);
   const [likedSongs, setLikedSongs] = useState<any[]>([]);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkUser();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      if (!session?.user) {
+        navigate('/auth');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate])
+
+  const checkUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      navigate('/auth');
+    } else {
+      setUser(user);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-background p-4 relative">
@@ -29,44 +62,103 @@ const Index = () => {
       </div>
 
       {/* Module Navigation */}
-      <div className="flex justify-center mb-8">
-        <div className="flex bg-card rounded-lg p-1 shadow-card">
+      <div className="flex justify-center mb-8 overflow-x-auto">
+        <div className="flex flex-wrap gap-2 bg-card rounded-lg p-2 shadow-card justify-center">
           <Button
             variant={activeModule === 'mood' ? 'default' : 'ghost'}
             onClick={() => setActiveModule('mood')}
             className="flex items-center gap-2"
+            size="sm"
           >
             <Heart className="h-4 w-4" />
-            😊 Mood Logger
+            😊 Mood
           </Button>
           <Button
             variant={activeModule === 'songs' ? 'default' : 'ghost'}
             onClick={() => setActiveModule('songs')}
             className="flex items-center gap-2"
+            size="sm"
           >
             <Music className="h-4 w-4" />
-            🎵 Song Recommender
+            🎵 Songs
           </Button>
           <Button
             variant={activeModule === 'preferences' ? 'default' : 'ghost'}
             onClick={() => setActiveModule('preferences')}
             className="flex items-center gap-2"
+            size="sm"
           >
             <Brain className="h-4 w-4" />
-            🧠 Preference Learner
+            🧠 Learn
+          </Button>
+          <Button
+            variant={activeModule === 'history' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('history')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <Calendar className="h-4 w-4" />
+            📊 History
+          </Button>
+          <Button
+            variant={activeModule === 'journal' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('journal')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <BookOpen className="h-4 w-4" />
+            📝 Journal
+          </Button>
+          <Button
+            variant={activeModule === 'playlists' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('playlists')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <List className="h-4 w-4" />
+            🎧 Playlists
+          </Button>
+          <Button
+            variant={activeModule === 'search' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('search')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <Search className="h-4 w-4" />
+            🔍 Search
+          </Button>
+          <Button
+            variant={activeModule === 'stats' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('stats')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <BarChart3 className="h-4 w-4" />
+            📈 Stats
+          </Button>
+          <Button
+            variant={activeModule === 'profile' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('profile')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <User className="h-4 w-4" />
+            👤 Profile
           </Button>
         </div>
       </div>
 
       {/* Module Content */}
       <div className="flex justify-center">
-        {activeModule === 'mood' ? (
-          <MoodLogger onMoodSelect={setSelectedMood} />
-        ) : activeModule === 'songs' ? (
-          <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
-        ) : (
-          <PreferenceLearner likedSongs={likedSongs} />
-        )}
+        {activeModule === 'mood' && <MoodLogger onMoodSelect={setSelectedMood} />}
+        {activeModule === 'songs' && <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />}
+        {activeModule === 'preferences' && <PreferenceLearner likedSongs={likedSongs} />}
+        {activeModule === 'history' && <MoodHistory />}
+        {activeModule === 'journal' && <MoodJournal selectedMood={selectedMood} />}
+        {activeModule === 'playlists' && <PlaylistManager />}
+        {activeModule === 'search' && <SongSearch />}
+        {activeModule === 'stats' && <Statistics />}
+        {activeModule === 'profile' && <UserProfile />}
       </div>
     </div>
   );

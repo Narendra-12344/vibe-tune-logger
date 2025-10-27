@@ -14,7 +14,179 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      custom_playlists: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      liked_songs: {
+        Row: {
+          artist: string
+          created_at: string
+          id: string
+          mood_id: string
+          song_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          artist: string
+          created_at?: string
+          id?: string
+          mood_id: string
+          song_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          artist?: string
+          created_at?: string
+          id?: string
+          mood_id?: string
+          song_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mood_journal_entries: {
+        Row: {
+          created_at: string
+          id: string
+          mood_id: string
+          mood_label: string
+          note: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mood_id: string
+          mood_label: string
+          note: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mood_id?: string
+          mood_label?: string
+          note?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mood_logs: {
+        Row: {
+          created_at: string
+          id: string
+          mood_id: string
+          mood_label: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mood_id: string
+          mood_label: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mood_id?: string
+          mood_label?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      playlist_songs: {
+        Row: {
+          added_at: string
+          artist: string
+          id: string
+          playlist_id: string
+          song_id: string
+          title: string
+        }
+        Insert: {
+          added_at?: string
+          artist: string
+          id?: string
+          playlist_id: string
+          song_id: string
+          title: string
+        }
+        Update: {
+          added_at?: string
+          artist?: string
+          id?: string
+          playlist_id?: string
+          song_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_songs_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "custom_playlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          favorite_moods: string[] | null
+          id: string
+          notification_enabled: boolean | null
+          theme_preference: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          favorite_moods?: string[] | null
+          id?: string
+          notification_enabled?: boolean | null
+          theme_preference?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          favorite_moods?: string[] | null
+          id?: string
+          notification_enabled?: boolean | null
+          theme_preference?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

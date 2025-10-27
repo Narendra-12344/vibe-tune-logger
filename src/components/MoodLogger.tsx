@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Music, Heart, Search } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Mood {
   id: string;
@@ -40,11 +42,29 @@ export const MoodLogger = ({ onMoodSelect }: MoodLoggerProps) => {
     onMoodSelect?.(mood);
   };
 
-  const handleLogMood = () => {
+  const handleLogMood = async () => {
     if (selectedMood) {
-      console.log('Mood logged:', { mood: selectedMood, intensity });
-      // Here you would typically save to a database
-      // For now, we'll just show a success state
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          toast.error('Please login to log moods');
+          return;
+        }
+
+        const { error } = await supabase
+          .from('mood_logs')
+          .insert({
+            user_id: user.id,
+            mood_id: selectedMood.id,
+            mood_label: selectedMood.label
+          });
+
+        if (error) throw error;
+        toast.success(`${selectedMood.emoji} Mood logged successfully!`);
+      } catch (error: any) {
+        console.error('Error logging mood:', error);
+        toast.error('Failed to log mood');
+      }
     }
   };
 
