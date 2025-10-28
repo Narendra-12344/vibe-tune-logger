@@ -187,6 +187,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_songs: {
+        Row: {
+          artist: string
+          created_at: string
+          duration: number | null
+          file_path: string
+          file_size: number | null
+          id: string
+          mood_tags: string[]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          artist: string
+          created_at?: string
+          duration?: number | null
+          file_path: string
+          file_size?: number | null
+          id?: string
+          mood_tags?: string[]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          artist?: string
+          created_at?: string
+          duration?: number | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          mood_tags?: string[]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

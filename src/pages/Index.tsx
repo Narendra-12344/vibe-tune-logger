@@ -11,10 +11,12 @@ import { UserProfile } from '@/components/UserProfile';
 import { SongSearch } from '@/components/SongSearch';
 import { Statistics } from '@/components/Statistics';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { SongUpload } from '@/components/SongUpload';
+import { UserSongsList } from '@/components/UserSongsList';
 import { Button } from '@/components/ui/button';
 import { Music, Heart, Brain, Calendar, BookOpen, List, User, Search, BarChart3 } from 'lucide-react';
 
-type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats';
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('mood');
@@ -145,13 +147,27 @@ const Index = () => {
             <User className="h-4 w-4" />
             👤 Profile
           </Button>
+          <Button
+            variant={activeModule === 'upload' ? 'default' : 'ghost'}
+            onClick={() => setActiveModule('upload')}
+            className="flex items-center gap-2"
+            size="sm"
+          >
+            <Music className="h-4 w-4" />
+            📁 Upload
+          </Button>
         </div>
       </div>
 
       {/* Module Content */}
-      <div className="flex justify-center">
+      <div className="flex justify-center w-full max-w-7xl mx-auto">
         {activeModule === 'mood' && <MoodLogger onMoodSelect={setSelectedMood} />}
-        {activeModule === 'songs' && <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />}
+        {activeModule === 'songs' && (
+          <div className="w-full space-y-6">
+            <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
+            <UserSongsList selectedMood={selectedMood?.id} />
+          </div>
+        )}
         {activeModule === 'preferences' && <PreferenceLearner likedSongs={likedSongs} />}
         {activeModule === 'history' && <MoodHistory />}
         {activeModule === 'journal' && <MoodJournal selectedMood={selectedMood} />}
@@ -159,6 +175,12 @@ const Index = () => {
         {activeModule === 'search' && <SongSearch />}
         {activeModule === 'stats' && <Statistics />}
         {activeModule === 'profile' && <UserProfile />}
+        {activeModule === 'upload' && (
+          <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SongUpload />
+            <UserSongsList />
+          </div>
+        )}
       </div>
     </div>
   );
