@@ -95,6 +95,46 @@ const moodSongs: MoodSongs = {
       genre: 'Funk Pop',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'High energy and feel-good vibes'
+    },
+    {
+      id: 'tel-happy-1',
+      title: 'Butta Bomma',
+      artist: 'Armaan Malik',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '4:05',
+      genre: 'Telugu Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'Uplifting Telugu melody with romantic vibes'
+    },
+    {
+      id: 'tel-happy-2',
+      title: 'Ramuloo Ramulaa',
+      artist: 'Anurag Kulkarni, Mangli',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '4:32',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Energetic folk beats and celebration'
+    },
+    {
+      id: 'tel-happy-3',
+      title: 'Samajavaragamana',
+      artist: 'Sid Sriram',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '4:18',
+      genre: 'Telugu Melody',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Soulful and joyful Telugu music'
+    },
+    {
+      id: 'tel-happy-4',
+      title: 'Inkem Inkem',
+      artist: 'Sid Sriram',
+      album: 'Geetha Govindam',
+      duration: '3:54',
+      genre: 'Telugu Romantic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Sweet and cheerful Telugu melody'
     }
   ],
   excited: [
@@ -167,6 +207,46 @@ const moodSongs: MoodSongs = {
       genre: 'Rock',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
       matchReason: 'High-octane excitement and joy'
+    },
+    {
+      id: 'tel-excited-1',
+      title: 'Buttabomma',
+      artist: 'Ram Miriyala',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '3:45',
+      genre: 'Telugu Dance',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'High-energy Telugu dance number'
+    },
+    {
+      id: 'tel-excited-2',
+      title: 'Seeti Maar',
+      artist: 'Devi Sri Prasad',
+      album: 'DJ',
+      duration: '4:12',
+      genre: 'Telugu Mass',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Explosive energy and mass appeal'
+    },
+    {
+      id: 'tel-excited-3',
+      title: 'Ringa Ringa',
+      artist: 'Rahul Nambiar, Suchitra',
+      album: 'Arya 2',
+      duration: '4:28',
+      genre: 'Telugu Party',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Party anthem with exciting beats'
+    },
+    {
+      id: 'tel-excited-4',
+      title: 'Dheemtanakka',
+      artist: 'Raghu Dixit, Priyadarshini',
+      album: 'Bahubali 2',
+      duration: '3:55',
+      genre: 'Telugu Folk Fusion',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Energetic folk fusion celebration'
     }
   ],
   calm: [
@@ -239,6 +319,46 @@ const moodSongs: MoodSongs = {
       genre: 'Pop',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'Gentle and emotionally soothing'
+    },
+    {
+      id: 'tel-calm-1',
+      title: 'Nee Kannu Neeli Samudram',
+      artist: 'Sid Sriram',
+      album: 'Uppena',
+      duration: '4:22',
+      genre: 'Telugu Melody',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'Serene and soothing Telugu vocals'
+    },
+    {
+      id: 'tel-calm-2',
+      title: 'Oka Praanam',
+      artist: 'Shreya Ghoshal',
+      album: 'Geethanjali',
+      duration: '4:45',
+      genre: 'Telugu Romantic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Peaceful and melodious composition'
+    },
+    {
+      id: 'tel-calm-3',
+      title: 'Oohale',
+      artist: 'Anirudh Ravichander',
+      album: 'Darbar',
+      duration: '3:58',
+      genre: 'Telugu Soft',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Gentle and calming Telugu melody'
+    },
+    {
+      id: 'tel-calm-4',
+      title: 'Nee Jathaga',
+      artist: 'Haricharan',
+      album: 'Yevadu',
+      duration: '4:15',
+      genre: 'Telugu Soft Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Relaxing with beautiful orchestration'
     }
   ],
   sad: [
@@ -311,6 +431,46 @@ const moodSongs: MoodSongs = {
       genre: 'Alternative Rock',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
       matchReason: 'Comforting yet melancholic'
+    },
+    {
+      id: 'tel-sad-1',
+      title: 'Neeli Neeli Aakasam',
+      artist: 'Sid Sriram',
+      album: '30 Rojullo Preminchadam Ela',
+      duration: '4:35',
+      genre: 'Telugu Melancholic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'Emotional depth and heartfelt vocals'
+    },
+    {
+      id: 'tel-sad-2',
+      title: 'Yemaaya Chesave',
+      artist: 'Haricharan',
+      album: 'Ye Maaya Chesave',
+      duration: '5:12',
+      genre: 'Telugu Sad',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Deeply emotional and touching melody'
+    },
+    {
+      id: 'tel-sad-3',
+      title: 'Nuvvunte Naa Jathagaa',
+      artist: 'Karthik',
+      album: 'Krishnarjuna Yudham',
+      duration: '4:28',
+      genre: 'Telugu Emotional',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Melancholic and introspective'
+    },
+    {
+      id: 'tel-sad-4',
+      title: 'Pranaamam',
+      artist: 'Yazin Nizar',
+      album: 'Janatha Garage',
+      duration: '4:42',
+      genre: 'Telugu Emotional',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Sorrowful and moving composition'
     }
   ],
   angry: [
@@ -383,6 +543,46 @@ const moodSongs: MoodSongs = {
       genre: 'Alternative Metal',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       matchReason: 'Chaotic and cathartic energy'
+    },
+    {
+      id: 'tel-angry-1',
+      title: 'Blockbuster',
+      artist: 'Thaman S',
+      album: 'Sarileru Neekevvaru',
+      duration: '3:48',
+      genre: 'Telugu Mass',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'Aggressive power and mass energy'
+    },
+    {
+      id: 'tel-angry-2',
+      title: 'Dhoom Dhaam',
+      artist: 'Benny Dayal',
+      album: 'Dookudu',
+      duration: '4:05',
+      genre: 'Telugu Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Intense and powerful Telugu beats'
+    },
+    {
+      id: 'tel-angry-3',
+      title: 'Oosaravelli',
+      artist: 'Yazin Nizar',
+      album: 'Oosaravelli',
+      duration: '4:22',
+      genre: 'Telugu Hard Rock',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Dark and aggressive energy'
+    },
+    {
+      id: 'tel-angry-4',
+      title: 'Bullet',
+      artist: 'Thaman S',
+      album: 'Krack',
+      duration: '3:55',
+      genre: 'Telugu Action',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Raw power and fierce attitude'
     }
   ],
   neutral: [
@@ -445,6 +645,46 @@ const moodSongs: MoodSongs = {
       genre: 'Electronic',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
       matchReason: 'Ambient and neutrally calming'
+    },
+    {
+      id: 'tel-neutral-1',
+      title: 'Vachadayyo Saami',
+      artist: 'Ananya, Sreerama Chandra',
+      album: 'Sammohanam',
+      duration: '4:18',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      matchReason: 'Balanced folk melody with universal appeal'
+    },
+    {
+      id: 'tel-neutral-2',
+      title: 'Choosi Chudangane',
+      artist: 'S. Thaman, Chinmayi',
+      album: 'Chalo',
+      duration: '3:52',
+      genre: 'Telugu Melody',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+      matchReason: 'Moderate tempo and contemplative'
+    },
+    {
+      id: 'tel-neutral-3',
+      title: 'Ninnila',
+      artist: 'Sid Sriram',
+      album: 'Tholi Prema',
+      duration: '4:25',
+      genre: 'Telugu Soft',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      matchReason: 'Reflective and emotionally balanced'
+    },
+    {
+      id: 'tel-neutral-4',
+      title: 'Priyathama Priyathama',
+      artist: 'Sid Sriram',
+      album: 'Majili',
+      duration: '4:38',
+      genre: 'Telugu Romantic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+      matchReason: 'Steady and thoughtful composition'
     }
   ]
 };
