@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Play, Pause, Heart, ExternalLink, RefreshCw, Search, Volume2, Share2 } from 'lucide-react';
+import { Play, Pause, Heart, ExternalLink, RefreshCw, Search, Volume2, Share2, ListPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
@@ -951,7 +951,7 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                         <span>{song.matchReason}</span>
                       </p>
 
-                      <div className="flex items-center gap-2 pt-2">
+                      <div className="flex items-center gap-2 pt-2 flex-wrap">
                         <Button 
                           size="sm" 
                           variant={currentSong?.id === song.id && isPlaying ? "default" : "outline"}
@@ -969,6 +969,25 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                               Play
                             </>
                           )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            if (song.audioPreviewUrl) {
+                              addToQueue({
+                                id: song.id,
+                                title: song.title,
+                                artist: song.artist,
+                                url: song.audioPreviewUrl,
+                                mood: selectedMood?.id
+                              });
+                              sonnerToast.success(`Added "${song.title}" to queue`);
+                            }
+                          }}
+                          title="Add to queue"
+                        >
+                          <ListPlus className="h-3 w-3" />
                         </Button>
                         <Button
                           size="sm"

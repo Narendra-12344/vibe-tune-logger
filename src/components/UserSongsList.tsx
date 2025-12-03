@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { useToast } from '@/hooks/use-toast';
-import { Play, Pause, Trash2, Music2 } from 'lucide-react';
+import { Play, Pause, Trash2, Music2, ListPlus } from 'lucide-react';
 
 interface UserSong {
   id: string;
@@ -22,7 +22,7 @@ interface UserSongsListProps {
 export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
   const [songs, setSongs] = useState<UserSong[]>([]);
   const [loading, setLoading] = useState(true);
-  const { currentSong, isPlaying, play, pause } = useAudioPlayer();
+  const { currentSong, isPlaying, play, pause, addToQueue } = useAudioPlayer();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,9 +58,10 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
   };
 
   const handlePlayPause = (song: UserSong) => {
-    const { data: { publicUrl } } = supabase.storage
-      .from('user-songs')
-      .getPublicUrl(song.file_path);
+    // file_path already contains the full public URL from upload
+    const songUrl = song.file_path.startsWith('http') 
+      ? song.file_path 
+      : supabase.storage.from('user-songs').getPublicUrl(song.file_path).data.publicUrl;
 
     if (currentSong?.id === song.id && isPlaying) {
       pause();
@@ -69,9 +70,29 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
         id: song.id,
         title: song.title,
         artist: song.artist,
-        url: publicUrl,
+        url: songUrl,
+        mood: song.mood_tags?.[0],
       });
     }
+  };
+
+  const handleAddToQueue = (song: UserSong) => {
+    const songUrl = song.file_path.startsWith('http') 
+      ? song.file_path 
+      : supabase.storage.from('user-songs').getPublicUrl(song.file_path).data.publicUrl;
+
+    addToQueue({
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      url: songUrl,
+      mood: song.mood_tags?.[0],
+    });
+    
+    toast({
+      title: 'Added to queue',
+      description: `${song.title} will play next`,
+    });
   };
 
   const handleDelete = async (song: UserSong) => {
@@ -163,14 +184,24 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
                   </div>
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleDelete(song)}
-                className="text-destructive hover:text-destructive"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleAddToQueue(song)}
+                  title="Add to queue"
+                >
+                  <ListPlus className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDelete(song)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           ))}
         </div>
