@@ -69,6 +69,7 @@ export function AppSidebar({ activeModule, setActiveModule, userEmail }: AppSide
     { id: 'history', icon: Calendar, label: '📊 History', emoji: '📊' },
     { id: 'journal', icon: BookOpen, label: '📝 Journal', emoji: '📝' },
     { id: 'playlists', icon: List, label: '🎧 Playlists', emoji: '🎧' },
+    { id: 'playlist-builder', icon: List, label: '🎼 Build Playlist', emoji: '🎼' },
     { id: 'search', icon: Search, label: '🔍 Search', emoji: '🔍' },
     { id: 'stats', icon: BarChart3, label: '📈 Stats', emoji: '📈' },
   ];

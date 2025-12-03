@@ -195,6 +195,7 @@ export type Database = {
           file_path: string
           file_size: number | null
           id: string
+          lyrics: string | null
           mood_tags: string[]
           title: string
           updated_at: string
@@ -207,6 +208,7 @@ export type Database = {
           file_path: string
           file_size?: number | null
           id?: string
+          lyrics?: string | null
           mood_tags?: string[]
           title: string
           updated_at?: string
@@ -219,6 +221,7 @@ export type Database = {
           file_path?: string
           file_size?: number | null
           id?: string
+          lyrics?: string | null
           mood_tags?: string[]
           title?: string
           updated_at?: string
