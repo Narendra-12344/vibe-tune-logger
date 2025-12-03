@@ -1,6 +1,7 @@
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { AudioVisualizer } from '@/components/AudioVisualizer';
 import { 
   Play, 
   Pause, 
@@ -9,10 +10,19 @@ import {
   Volume2, 
   VolumeX,
   Music,
-  X
+  X,
+  ListMusic
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { QueueManager } from '@/components/QueueManager';
 
 export const AudioPlayerBar = () => {
   const {
@@ -61,15 +71,16 @@ export const AudioPlayerBar = () => {
       </div>
 
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-        {/* Song Info */}
+        {/* Song Info with Visualizer */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-12 h-12 rounded-md bg-gradient-primary flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-md bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shrink-0 relative overflow-hidden">
             <Music className="w-6 h-6 text-primary-foreground" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="font-medium truncate text-foreground">{currentSong.title}</p>
             <p className="text-sm text-muted-foreground truncate">{currentSong.artist}</p>
           </div>
+          <AudioVisualizer barCount={12} className="hidden sm:flex" />
         </div>
 
         {/* Controls */}
@@ -114,8 +125,25 @@ export const AudioPlayerBar = () => {
           </div>
         </div>
 
-        {/* Volume & Close */}
+        {/* Volume, Queue & Close */}
         <div className="flex items-center gap-2 flex-1 justify-end">
+          {/* Queue Button */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <ListMusic className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-80">
+              <SheetHeader>
+                <SheetTitle>Up Next</SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <QueueManager />
+              </div>
+            </SheetContent>
+          </Sheet>
+
           <div 
             className="relative flex items-center"
             onMouseEnter={() => setShowVolumeSlider(true)}

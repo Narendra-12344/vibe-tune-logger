@@ -16,6 +16,8 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DragDropPlaylistBuilder } from '@/components/DragDropPlaylistBuilder';
 import { LyricsDisplay } from '@/components/LyricsDisplay';
+import { QueueManager } from '@/components/QueueManager';
+import { FolderUpload } from '@/components/FolderUpload';
 import { useMoodTheme } from '@/contexts/MoodThemeContext';
 import { cn } from '@/lib/utils';
 
@@ -91,8 +93,9 @@ const Index = () => {
                     <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
                     <UserSongsList selectedMood={selectedMood?.id} />
                   </div>
-                  <div className="xl:col-span-1">
+                  <div className="xl:col-span-1 space-y-6">
                     <LyricsDisplay />
+                    <QueueManager />
                   </div>
                 </div>
               )}
@@ -105,8 +108,11 @@ const Index = () => {
               {activeModule === 'stats' && <Statistics />}
               {activeModule === 'profile' && <UserProfile />}
               {activeModule === 'upload' && (
-                <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <SongUpload />
+                <div className="w-full max-w-6xl mx-auto space-y-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <SongUpload />
+                    <FolderUpload />
+                  </div>
                   <UserSongsList />
                 </div>
               )}
