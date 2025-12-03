@@ -14,8 +14,12 @@ import { SongUpload } from '@/components/SongUpload';
 import { UserSongsList } from '@/components/UserSongsList';
 import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { DragDropPlaylistBuilder } from '@/components/DragDropPlaylistBuilder';
+import { LyricsDisplay } from '@/components/LyricsDisplay';
+import { useMoodTheme } from '@/contexts/MoodThemeContext';
+import { cn } from '@/lib/utils';
 
-type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload';
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('mood');
@@ -24,6 +28,13 @@ const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [userEmail, setUserEmail] = useState<string>('');
   const navigate = useNavigate();
+  const { setCurrentMood, getMoodStyles } = useMoodTheme();
+
+  // Update mood theme when mood is selected
+  const handleMoodSelect = (mood: { id: string; label: string }) => {
+    setSelectedMood(mood);
+    setCurrentMood(mood.id as any);
+  };
 
   useEffect(() => {
     checkUser();
@@ -49,7 +60,10 @@ const Index = () => {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-gradient-background">
+      <div className={cn(
+        "min-h-screen flex w-full transition-all duration-500 pb-24",
+        `bg-gradient-to-br ${getMoodStyles()}`
+      )}>
         <AppSidebar 
           activeModule={activeModule} 
           setActiveModule={setActiveModule}
@@ -70,17 +84,23 @@ const Index = () => {
           {/* Main Content */}
           <div className="flex-1 overflow-auto p-6">
             <div className="max-w-7xl mx-auto">
-              {activeModule === 'mood' && <MoodLogger onMoodSelect={setSelectedMood} />}
+              {activeModule === 'mood' && <MoodLogger onMoodSelect={handleMoodSelect} />}
               {activeModule === 'songs' && (
-                <div className="w-full space-y-6">
-                  <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
-                  <UserSongsList selectedMood={selectedMood?.id} />
+                <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-6">
+                  <div className="xl:col-span-2 space-y-6">
+                    <SongRecommender selectedMood={selectedMood} likedSongs={likedSongs} setLikedSongs={setLikedSongs} />
+                    <UserSongsList selectedMood={selectedMood?.id} />
+                  </div>
+                  <div className="xl:col-span-1">
+                    <LyricsDisplay />
+                  </div>
                 </div>
               )}
               {activeModule === 'preferences' && <PreferenceLearner likedSongs={likedSongs} />}
               {activeModule === 'history' && <MoodHistory />}
               {activeModule === 'journal' && <MoodJournal selectedMood={selectedMood} />}
               {activeModule === 'playlists' && <PlaylistManager />}
+              {activeModule === 'playlist-builder' && <DragDropPlaylistBuilder />}
               {activeModule === 'search' && <SongSearch />}
               {activeModule === 'stats' && <Statistics />}
               {activeModule === 'profile' && <UserProfile />}

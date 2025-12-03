@@ -4,9 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Play, Heart, ExternalLink, RefreshCw, Search, Volume2 } from 'lucide-react';
+import { Play, Pause, Heart, ExternalLink, RefreshCw, Search, Volume2, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
+import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
+import { ShareDialog } from '@/components/ShareDialog';
 
 interface Song {
   id: string;
@@ -700,9 +702,8 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
   const [isGenerating, setIsGenerating] = useState(false);
   const [likedSongsSet, setLikedSongsSet] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [playingSongId, setPlayingSongId] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
+  const { currentSong, isPlaying, play, pause, resume, addToQueue } = useAudioPlayer();
 
   // Load liked songs from database on mount
   useEffect(() => {
@@ -810,15 +811,13 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
   };
 
   const playSong = async (song: Song) => {
-    // Stop currently playing song if any
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-
-    // If clicking the same song, just stop it
-    if (playingSongId === song.id) {
-      setPlayingSongId(null);
+    // If clicking the same song that's playing, toggle pause/play
+    if (currentSong?.id === song.id) {
+      if (isPlaying) {
+        pause();
+      } else {
+        resume();
+      }
       return;
     }
 
@@ -832,42 +831,14 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
       return;
     }
 
-    setPlayingSongId(song.id);
-
-    // Create and play audio
-    const audio = new Audio(song.audioPreviewUrl);
-    audioRef.current = audio;
-
-    audio.onended = () => {
-      setPlayingSongId(null);
-      audioRef.current = null;
-    };
-
-    audio.onerror = () => {
-      setPlayingSongId(null);
-      audioRef.current = null;
-      toast({
-        title: "Playback error",
-        description: "Could not play this song. Please try another.",
-        variant: "destructive"
-      });
-    };
-
-    try {
-      await audio.play();
-      toast({
-        title: "Now playing",
-        description: `${song.title} by ${song.artist}`,
-      });
-    } catch (error) {
-      setPlayingSongId(null);
-      audioRef.current = null;
-      toast({
-        title: "Playback error",
-        description: "Could not play this song. Please try another.",
-        variant: "destructive"
-      });
-    }
+    // Play with global audio player
+    play({
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      url: song.audioPreviewUrl,
+      mood: selectedMood?.id,
+    });
   };
 
   // Filter songs based on search query
@@ -983,14 +954,14 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                       <div className="flex items-center gap-2 pt-2">
                         <Button 
                           size="sm" 
-                          variant={playingSongId === song.id ? "default" : "outline"}
+                          variant={currentSong?.id === song.id && isPlaying ? "default" : "outline"}
                           onClick={() => playSong(song)}
                           className="flex-1"
                         >
-                          {playingSongId === song.id ? (
+                          {currentSong?.id === song.id && isPlaying ? (
                             <>
-                              <Volume2 className="h-3 w-3 mr-1 animate-pulse" />
-                              Playing
+                              <Pause className="h-3 w-3 mr-1" />
+                              Pause
                             </>
                           ) : (
                             <>
@@ -1007,6 +978,11 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
                         >
                           <Heart className={`h-3 w-3 ${likedSongsSet.has(song.id) ? 'fill-current' : ''}`} />
                         </Button>
+                        <ShareDialog title={song.title} artist={song.artist} type="song">
+                          <Button size="sm" variant="outline">
+                            <Share2 className="h-3 w-3" />
+                          </Button>
+                        </ShareDialog>
                         {song.spotifyUrl && (
                           <Button size="sm" variant="outline" asChild>
                             <a href={song.spotifyUrl} target="_blank" rel="noopener noreferrer">
