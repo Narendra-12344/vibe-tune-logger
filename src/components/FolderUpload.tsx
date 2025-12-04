@@ -57,6 +57,22 @@ const parseFilename = (filename: string): { title: string; artist: string } => {
   };
 };
 
+// Get audio duration
+const getAudioDuration = (file: File): Promise<number | null> => {
+  return new Promise((resolve) => {
+    const audio = new Audio();
+    audio.addEventListener('loadedmetadata', () => {
+      resolve(audio.duration);
+      URL.revokeObjectURL(audio.src);
+    });
+    audio.addEventListener('error', () => {
+      resolve(null);
+      URL.revokeObjectURL(audio.src);
+    });
+    audio.src = URL.createObjectURL(file);
+  });
+};
+
 interface UploadedFile {
   file: File;
   status: 'pending' | 'uploading' | 'success' | 'error';
@@ -64,6 +80,7 @@ interface UploadedFile {
   artist: string;
   moods: string[];
   progress: number;
+  duration: number | null;
   error?: string;
 }
 
@@ -95,13 +112,20 @@ export const FolderUpload = () => {
       const moods = detectMoodFromFilename(file.name);
       return {
         file,
-        status: 'pending',
+        status: 'pending' as const,
         title,
         artist,
         moods,
-        progress: 0
+        progress: 0,
+        duration: null
       };
     });
+
+    // Detect durations for all files
+    Promise.all(uploadFiles.map(async (uf, i) => {
+      const duration = await getAudioDuration(uf.file);
+      setFiles(prev => prev.map((f, idx) => idx === i ? { ...f, duration } : f));
+    }));
 
     setFiles(uploadFiles);
     toast({
@@ -134,7 +158,7 @@ export const FolderUpload = () => {
         .from('user-songs')
         .getPublicUrl(filePath);
 
-      // Insert into database
+      // Insert into database with duration
       const { error: dbError } = await supabase
         .from('user_songs')
         .insert({
@@ -143,7 +167,8 @@ export const FolderUpload = () => {
           artist: uploadFile.artist,
           mood_tags: uploadFile.moods,
           file_path: urlData.publicUrl,
-          file_size: uploadFile.file.size
+          file_size: uploadFile.file.size,
+          duration: uploadFile.duration ? Math.floor(uploadFile.duration) : null
         });
 
       if (dbError) throw dbError;
