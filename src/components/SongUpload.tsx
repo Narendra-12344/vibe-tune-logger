@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, Music } from 'lucide-react';
+import { Upload, Music, Clock } from 'lucide-react';
 
 const MOOD_OPTIONS = [
   { id: 'happy', label: 'Happy' },
@@ -17,12 +17,35 @@ const MOOD_OPTIONS = [
   { id: 'melancholic', label: 'Melancholic' },
 ];
 
+// Helper to get audio duration
+const getAudioDuration = (file: File): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const audio = new Audio();
+    audio.addEventListener('loadedmetadata', () => {
+      resolve(audio.duration);
+      URL.revokeObjectURL(audio.src);
+    });
+    audio.addEventListener('error', () => {
+      reject(new Error('Failed to load audio'));
+      URL.revokeObjectURL(audio.src);
+    });
+    audio.src = URL.createObjectURL(file);
+  });
+};
+
+const formatDuration = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
 export const SongUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [detectedDuration, setDetectedDuration] = useState<number | null>(null);
   const { toast } = useToast();
 
   const handleMoodToggle = (moodId: string) => {
@@ -33,7 +56,7 @@ export const SongUpload = () => {
     );
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       // Check if it's an audio file
@@ -46,6 +69,19 @@ export const SongUpload = () => {
         return;
       }
       setFile(selectedFile);
+      
+      // Auto-detect duration
+      try {
+        const duration = await getAudioDuration(selectedFile);
+        setDetectedDuration(duration);
+        toast({
+          title: 'Duration detected',
+          description: `Song duration: ${formatDuration(duration)}`,
+        });
+      } catch (error) {
+        console.error('Error detecting duration:', error);
+        setDetectedDuration(null);
+      }
     }
   };
 
@@ -80,7 +116,7 @@ export const SongUpload = () => {
         .from('user-songs')
         .getPublicUrl(fileName);
 
-      // Save song metadata to database
+      // Save song metadata to database with duration
       const { error: dbError } = await supabase
         .from('user_songs')
         .insert({
@@ -88,8 +124,9 @@ export const SongUpload = () => {
           title,
           artist,
           mood_tags: selectedMoods,
-          file_path: fileName,
+          file_path: publicUrl,
           file_size: file.size,
+          duration: detectedDuration ? Math.floor(detectedDuration) : null,
         });
 
       if (dbError) throw dbError;
@@ -104,6 +141,7 @@ export const SongUpload = () => {
       setTitle('');
       setArtist('');
       setSelectedMoods([]);
+      setDetectedDuration(null);
       // Reset file input
       const fileInput = document.getElementById('song-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
@@ -142,9 +180,15 @@ export const SongUpload = () => {
             disabled={uploading}
           />
           {file && (
-            <p className="text-sm text-muted-foreground">
-              Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-            </p>
+            <div className="text-sm text-muted-foreground space-y-1">
+              <p>Selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+              {detectedDuration && (
+                <p className="flex items-center gap-1 text-primary">
+                  <Clock className="w-3 h-3" />
+                  Duration: {formatDuration(detectedDuration)}
+                </p>
+              )}
+            </div>
           )}
         </div>
 

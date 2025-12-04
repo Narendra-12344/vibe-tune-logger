@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { useToast } from '@/hooks/use-toast';
-import { Play, Pause, Trash2, Music2, ListPlus } from 'lucide-react';
+import { useServiceWorker } from '@/hooks/useServiceWorker';
+import { Play, Pause, Trash2, Music2, ListPlus, Download, Clock, WifiOff, Wifi } from 'lucide-react';
 
 interface UserSong {
   id: string;
@@ -13,7 +14,15 @@ interface UserSong {
   artist: string;
   mood_tags: string[];
   file_path: string;
+  duration: number | null;
 }
+
+const formatDuration = (seconds: number | null): string => {
+  if (!seconds) return '--:--';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 interface UserSongsListProps {
   selectedMood?: string;
@@ -24,6 +33,7 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
   const [loading, setLoading] = useState(true);
   const { currentSong, isPlaying, play, pause, addToQueue } = useAudioPlayer();
   const { toast } = useToast();
+  const { isOnline, cacheSong, cachedSongs } = useServiceWorker();
 
   useEffect(() => {
     fetchUserSongs();
@@ -148,10 +158,18 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Music Library</CardTitle>
-        <CardDescription>
-          {selectedMood ? `Showing ${selectedMood} songs` : 'All uploaded songs'}
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Your Music Library</CardTitle>
+            <CardDescription>
+              {selectedMood ? `Showing ${selectedMood} songs` : 'All uploaded songs'}
+            </CardDescription>
+          </div>
+          <Badge variant={isOnline ? "default" : "secondary"} className="flex items-center gap-1">
+            {isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+            {isOnline ? 'Online' : 'Offline'}
+          </Badge>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -174,7 +192,15 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
                 </Button>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{song.title}</p>
-                  <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span className="truncate">{song.artist}</span>
+                    {song.duration && (
+                      <span className="flex items-center gap-1 shrink-0">
+                        <Clock className="w-3 h-3" />
+                        {formatDuration(song.duration)}
+                      </span>
+                    )}
+                  </div>
                   <div className="flex gap-1 mt-1 flex-wrap">
                     {song.mood_tags?.map((mood) => (
                       <Badge key={mood} variant="secondary" className="text-xs">
@@ -185,6 +211,23 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
                 </div>
               </div>
               <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    const songUrl = song.file_path.startsWith('http') 
+                      ? song.file_path 
+                      : supabase.storage.from('user-songs').getPublicUrl(song.file_path).data.publicUrl;
+                    cacheSong(songUrl);
+                    toast({
+                      title: 'Song cached',
+                      description: 'Song saved for offline playback',
+                    });
+                  }}
+                  title="Save for offline"
+                >
+                  <Download className="w-4 h-4" />
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"

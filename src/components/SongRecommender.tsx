@@ -137,6 +137,36 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Romantic',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Sweet and cheerful Telugu melody'
+    },
+    {
+      id: 'tel-happy-5',
+      title: 'Srivalli',
+      artist: 'Sid Sriram',
+      album: 'Pushpa',
+      duration: '3:58',
+      genre: 'Telugu Folk Pop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Catchy folk-infused joyful melody'
+    },
+    {
+      id: 'tel-happy-6',
+      title: 'Yenti Yenti',
+      artist: 'Chinmayi',
+      album: 'Geetha Govindam',
+      duration: '4:02',
+      genre: 'Telugu Dance',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Playful and upbeat Telugu track'
+    },
+    {
+      id: 'tel-happy-7',
+      title: 'Mind Block',
+      artist: 'Blaaze',
+      album: 'Sarileru Neekevvaru',
+      duration: '4:12',
+      genre: 'Telugu Mass',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+      matchReason: 'High-energy happy mass track'
     }
   ],
   excited: [
@@ -249,6 +279,36 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Folk Fusion',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Energetic folk fusion celebration'
+    },
+    {
+      id: 'tel-excited-5',
+      title: 'Oo Antava',
+      artist: 'Indravathi Chauhan',
+      album: 'Pushpa',
+      duration: '3:22',
+      genre: 'Telugu Item',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Electrifying beats and catchy hook'
+    },
+    {
+      id: 'tel-excited-6',
+      title: 'Naatu Naatu',
+      artist: 'Rahul Sipligunj, Kaala Bhairava',
+      album: 'RRR',
+      duration: '4:45',
+      genre: 'Telugu Dance',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Oscar-winning high-energy dance anthem'
+    },
+    {
+      id: 'tel-excited-7',
+      title: 'Jingunamani',
+      artist: 'Yogi B, Blaaze',
+      album: 'Jilla',
+      duration: '4:18',
+      genre: 'Telugu Hip-Hop',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+      matchReason: 'Explosive hip-hop energy'
     }
   ],
   calm: [
@@ -361,6 +421,26 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Soft Rock',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Relaxing with beautiful orchestration'
+    },
+    {
+      id: 'tel-calm-5',
+      title: 'Vachinde',
+      artist: 'Chinmayi, Dhanunjay',
+      album: 'Fidaa',
+      duration: '4:08',
+      genre: 'Telugu Romantic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Gentle and soothing melody'
+    },
+    {
+      id: 'tel-calm-6',
+      title: 'Pillaa Raa',
+      artist: 'Sid Sriram',
+      album: 'RX 100',
+      duration: '3:52',
+      genre: 'Telugu Melody',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Peaceful and dreamy composition'
     }
   ],
   sad: [
@@ -473,6 +553,26 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Emotional',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Sorrowful and moving composition'
+    },
+    {
+      id: 'tel-sad-5',
+      title: 'Kanulu Kanulanu Dochayante',
+      artist: 'Anurag Kulkarni',
+      album: 'Mahanati',
+      duration: '5:12',
+      genre: 'Telugu Classical',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Deeply emotional classical piece'
+    },
+    {
+      id: 'tel-sad-6',
+      title: 'Emo Emo',
+      artist: 'Sid Sriram',
+      album: 'Devadas',
+      duration: '4:28',
+      genre: 'Telugu Melancholic',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Heart-wrenching vocals and melody'
     }
   ],
   angry: [
@@ -585,6 +685,26 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Action',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Raw power and fierce attitude'
+    },
+    {
+      id: 'tel-angry-5',
+      title: 'Dangamaari Oodhani',
+      artist: 'Anurag Kulkarni',
+      album: 'Baahubali',
+      duration: '4:15',
+      genre: 'Telugu Mass',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Intense warrior anthem'
+    },
+    {
+      id: 'tel-angry-6',
+      title: 'Jilla Jilla',
+      artist: 'Blaaze',
+      album: 'Jilla',
+      duration: '4:02',
+      genre: 'Telugu Hard',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Aggressive and powerful'
     }
   ],
   neutral: [
@@ -687,6 +807,26 @@ const moodSongs: MoodSongs = {
       genre: 'Telugu Romantic',
       audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       matchReason: 'Steady and thoughtful composition'
+    },
+    {
+      id: 'tel-neutral-5',
+      title: 'Kallu Kallu',
+      artist: 'Shaan',
+      album: 'Athadu',
+      duration: '4:05',
+      genre: 'Telugu Soft',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+      matchReason: 'Easy-going and relaxed feel'
+    },
+    {
+      id: 'tel-neutral-6',
+      title: 'Yemaindo Telidu',
+      artist: 'Sid Sriram',
+      album: 'Saaho',
+      duration: '4:22',
+      genre: 'Telugu Melody',
+      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+      matchReason: 'Balanced and soothing'
     }
   ]
 };

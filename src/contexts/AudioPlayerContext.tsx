@@ -16,6 +16,7 @@ interface AudioPlayerContextType {
   currentTime: number;
   duration: number;
   queue: Song[];
+  audioRef: React.RefObject<HTMLAudioElement | null>;
   play: (song: Song) => void;
   pause: () => void;
   resume: () => void;
@@ -170,6 +171,7 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       currentTime,
       duration,
       queue,
+      audioRef,
       play,
       pause,
       resume,
