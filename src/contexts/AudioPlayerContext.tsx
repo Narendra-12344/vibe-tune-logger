@@ -9,6 +9,8 @@ export interface Song {
   lyrics?: string;
 }
 
+type RepeatMode = 'off' | 'all' | 'one';
+
 interface AudioPlayerContextType {
   currentSong: Song | null;
   isPlaying: boolean;
@@ -16,6 +18,8 @@ interface AudioPlayerContextType {
   currentTime: number;
   duration: number;
   queue: Song[];
+  shuffle: boolean;
+  repeatMode: RepeatMode;
   audioRef: React.RefObject<HTMLAudioElement | null>;
   play: (song: Song) => void;
   pause: () => void;
@@ -29,6 +33,8 @@ interface AudioPlayerContextType {
   playNext: () => void;
   playPrevious: () => void;
   setQueue: (songs: Song[]) => void;
+  toggleShuffle: () => void;
+  toggleRepeat: () => void;
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
@@ -40,37 +46,13 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [queue, setQueueState] = useState<Song[]>([]);
+  const [originalQueue, setOriginalQueue] = useState<Song[]>([]);
   const [historyStack, setHistoryStack] = useState<Song[]>([]);
+  const [shuffle, setShuffle] = useState(false);
+  const [repeatMode, setRepeatMode] = useState<RepeatMode>('off');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Update time and duration
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    const handleEnded = () => {
-      if (queue.length > 0) {
-        playNext();
-      } else {
-        setIsPlaying(false);
-      }
-    };
-
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', handleEnded);
-
-    return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [queue]);
-
-  const play = useCallback(async (song: Song) => {
-    // Prevent race conditions by stopping any pending play operations
+  const playInternal = useCallback(async (song: Song) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
@@ -82,7 +64,6 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       audio.volume = volume;
       audio.preload = 'auto';
       
-      // Set up event listeners before setting src
       audio.addEventListener('canplaythrough', async () => {
         try {
           await audio.play();
@@ -92,7 +73,6 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
           setCurrentSong(song);
           setIsPlaying(true);
         } catch (playError) {
-          // Ignore AbortError as it's expected when quickly switching songs
           if ((playError as Error).name !== 'AbortError') {
             console.error('Error playing audio:', playError);
           }
@@ -110,6 +90,55 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       console.error('Error setting up audio:', error);
     }
   }, [volume, currentSong]);
+
+  const playNextInternal = useCallback(() => {
+    if (queue.length > 0) {
+      const nextIndex = shuffle ? Math.floor(Math.random() * queue.length) : 0;
+      const nextSong = queue[nextIndex];
+      setQueueState(prev => prev.filter((_, i) => i !== nextIndex));
+      playInternal(nextSong);
+    }
+  }, [queue, shuffle, playInternal]);
+
+  // Handle song ended with repeat modes
+  const handleSongEnded = useCallback(() => {
+    if (repeatMode === 'one' && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(console.error);
+    } else if (queue.length > 0) {
+      playNextInternal();
+    } else if (repeatMode === 'all' && originalQueue.length > 0) {
+      const shuffledQueue = shuffle 
+        ? [...originalQueue].sort(() => Math.random() - 0.5)
+        : [...originalQueue];
+      setQueueState(shuffledQueue.slice(1));
+      playInternal(shuffledQueue[0]);
+    } else {
+      setIsPlaying(false);
+    }
+  }, [repeatMode, queue, originalQueue, shuffle, playInternal, playNextInternal]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+
+    audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', handleSongEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('ended', handleSongEnded);
+    };
+  }, [handleSongEnded]);
+
+  const play = useCallback((song: Song) => {
+    playInternal(song);
+  }, [playInternal]);
 
   const pause = useCallback(() => {
     if (audioRef.current) {
@@ -152,27 +181,27 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const addToQueue = useCallback((song: Song) => {
     setQueueState(prev => [...prev, song]);
+    setOriginalQueue(prev => [...prev, song]);
   }, []);
 
   const removeFromQueue = useCallback((songId: string) => {
     setQueueState(prev => prev.filter(s => s.id !== songId));
+    setOriginalQueue(prev => prev.filter(s => s.id !== songId));
   }, []);
 
   const clearQueue = useCallback(() => {
     setQueueState([]);
+    setOriginalQueue([]);
   }, []);
 
   const setQueue = useCallback((songs: Song[]) => {
     setQueueState(songs);
+    setOriginalQueue(songs);
   }, []);
 
   const playNext = useCallback(() => {
-    if (queue.length > 0) {
-      const nextSong = queue[0];
-      setQueueState(prev => prev.slice(1));
-      play(nextSong);
-    }
-  }, [queue, play]);
+    playNextInternal();
+  }, [playNextInternal]);
 
   const playPrevious = useCallback(() => {
     if (historyStack.length > 0) {
@@ -181,9 +210,21 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       if (currentSong) {
         setQueueState(prev => [currentSong, ...prev]);
       }
-      play(prevSong);
+      playInternal(prevSong);
     }
-  }, [historyStack, currentSong, play]);
+  }, [historyStack, currentSong, playInternal]);
+
+  const toggleShuffle = useCallback(() => {
+    setShuffle(prev => !prev);
+  }, []);
+
+  const toggleRepeat = useCallback(() => {
+    setRepeatMode(prev => {
+      if (prev === 'off') return 'all';
+      if (prev === 'all') return 'one';
+      return 'off';
+    });
+  }, []);
 
   return (
     <AudioPlayerContext.Provider value={{
@@ -193,6 +234,8 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       currentTime,
       duration,
       queue,
+      shuffle,
+      repeatMode,
       audioRef,
       play,
       pause,
@@ -206,6 +249,8 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
       playNext,
       playPrevious,
       setQueue,
+      toggleShuffle,
+      toggleRepeat,
     }}>
       {children}
     </AudioPlayerContext.Provider>

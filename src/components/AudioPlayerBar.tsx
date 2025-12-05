@@ -2,6 +2,7 @@ import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { 
   Play, 
   Pause, 
@@ -11,7 +12,10 @@ import {
   VolumeX,
   Music,
   X,
-  ListMusic
+  ListMusic,
+  Shuffle,
+  Repeat,
+  Repeat1
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -31,6 +35,8 @@ export const AudioPlayerBar = () => {
     volume,
     currentTime,
     duration,
+    shuffle,
+    repeatMode,
     pause,
     resume,
     stop,
@@ -38,6 +44,8 @@ export const AudioPlayerBar = () => {
     seek,
     playNext,
     playPrevious,
+    toggleShuffle,
+    toggleRepeat,
   } = useAudioPlayer();
 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
@@ -52,6 +60,8 @@ export const AudioPlayerBar = () => {
   };
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  const RepeatIcon = repeatMode === 'one' ? Repeat1 : Repeat;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border shadow-lg">
@@ -80,12 +90,29 @@ export const AudioPlayerBar = () => {
             <p className="font-medium truncate text-foreground">{currentSong.title}</p>
             <p className="text-sm text-muted-foreground truncate">{currentSong.artist}</p>
           </div>
+          <FavoriteButton 
+            songId={currentSong.id}
+            title={currentSong.title}
+            artist={currentSong.artist}
+            moodId={currentSong.mood}
+            className="shrink-0"
+          />
           <AudioVisualizer barCount={12} className="hidden sm:flex" />
         </div>
 
         {/* Controls */}
         <div className="flex flex-col items-center gap-1 flex-1">
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleShuffle}
+              className={cn("h-8 w-8", shuffle && "text-primary")}
+              title="Shuffle"
+            >
+              <Shuffle className="h-4 w-4" />
+            </Button>
+            
             <Button
               variant="ghost"
               size="icon"
@@ -115,6 +142,16 @@ export const AudioPlayerBar = () => {
               className="h-9 w-9 hover:bg-muted"
             >
               <SkipForward className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleRepeat}
+              className={cn("h-8 w-8", repeatMode !== 'off' && "text-primary")}
+              title={`Repeat: ${repeatMode}`}
+            >
+              <RepeatIcon className="h-4 w-4" />
             </Button>
           </div>
           
