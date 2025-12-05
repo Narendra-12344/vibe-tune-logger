@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { useToast } from '@/hooks/use-toast';
 import { useServiceWorker } from '@/hooks/useServiceWorker';
+import { SongSearchFilter } from '@/components/SongSearchFilter';
 import { Play, Pause, Trash2, Music2, ListPlus, Download, Clock, WifiOff, Wifi } from 'lucide-react';
 
 interface UserSong {
@@ -30,41 +31,75 @@ interface UserSongsListProps {
 
 export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
   const [songs, setSongs] = useState<UserSong[]>([]);
+  const [allSongs, setAllSongs] = useState<UserSong[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [moodFilter, setMoodFilter] = useState<string | undefined>(selectedMood);
   const { currentSong, isPlaying, play, pause, addToQueue } = useAudioPlayer();
   const { toast } = useToast();
   const { isOnline, cacheSong, cachedSongs } = useServiceWorker();
 
+  // Get unique moods from all songs
+  const availableMoods = useMemo(() => {
+    const moods = new Set<string>();
+    allSongs.forEach(song => {
+      song.mood_tags?.forEach(mood => moods.add(mood));
+    });
+    return Array.from(moods);
+  }, [allSongs]);
+
   useEffect(() => {
     fetchUserSongs();
-  }, [selectedMood]);
+  }, []);
+
+  useEffect(() => {
+    filterSongs();
+  }, [searchQuery, moodFilter, allSongs, selectedMood]);
 
   const fetchUserSongs = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      let query = supabase
+      const { data, error } = await supabase
         .from('user_songs')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      const { data, error } = await query;
-
       if (error) throw error;
-
-      // Filter by mood if selected
-      const filteredData = selectedMood
-        ? data?.filter(song => song.mood_tags?.includes(selectedMood))
-        : data;
-
-      setSongs(filteredData || []);
+      setAllSongs(data || []);
     } catch (error) {
       console.error('Error fetching songs:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const filterSongs = () => {
+    let filtered = [...allSongs];
+    
+    // Apply mood filter from prop or search filter
+    const activeMood = moodFilter || selectedMood;
+    if (activeMood) {
+      filtered = filtered.filter(song => song.mood_tags?.includes(activeMood));
+    }
+    
+    // Apply search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(song =>
+        song.title.toLowerCase().includes(query) ||
+        song.artist.toLowerCase().includes(query)
+      );
+    }
+    
+    setSongs(filtered);
+  };
+
+  const handleSearch = (query: string, filters: { mood?: string }) => {
+    setSearchQuery(query);
+    setMoodFilter(filters.mood);
   };
 
   const handlePlayPause = (song: UserSong) => {
@@ -142,7 +177,7 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
     return <div>Loading your songs...</div>;
   }
 
-  if (songs.length === 0) {
+  if (allSongs.length === 0) {
     return (
       <Card>
         <CardContent className="pt-6">
@@ -160,9 +195,9 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Your Music Library</CardTitle>
+            <CardTitle>Your Music Library ({songs.length} songs)</CardTitle>
             <CardDescription>
-              {selectedMood ? `Showing ${selectedMood} songs` : 'All uploaded songs'}
+              {moodFilter || selectedMood ? `Filtered by ${moodFilter || selectedMood}` : 'All uploaded songs'}
             </CardDescription>
           </div>
           <Badge variant={isOnline ? "default" : "secondary"} className="flex items-center gap-1">
@@ -171,7 +206,18 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
+        <SongSearchFilter 
+          onSearch={handleSearch} 
+          availableMoods={availableMoods} 
+        />
+        
+        {songs.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">
+            <Music2 className="w-8 h-8 mx-auto mb-2 opacity-50" />
+            <p>No songs match your search</p>
+          </div>
+        ) : (
         <div className="space-y-3">
           {songs.map((song) => (
             <div
@@ -248,6 +294,7 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
             </div>
           ))}
         </div>
+        )}
       </CardContent>
     </Card>
   );

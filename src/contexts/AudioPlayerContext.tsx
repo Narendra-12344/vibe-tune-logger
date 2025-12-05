@@ -69,24 +69,46 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
   }, [queue]);
 
-  const play = useCallback((song: Song) => {
+  const play = useCallback(async (song: Song) => {
+    // Prevent race conditions by stopping any pending play operations
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
     }
 
-    const audio = new Audio(song.url);
-    audio.volume = volume;
-    audioRef.current = audio;
+    try {
+      const audio = new Audio();
+      audio.volume = volume;
+      audio.preload = 'auto';
+      
+      // Set up event listeners before setting src
+      audio.addEventListener('canplaythrough', async () => {
+        try {
+          await audio.play();
+          if (currentSong) {
+            setHistoryStack(prev => [...prev, currentSong]);
+          }
+          setCurrentSong(song);
+          setIsPlaying(true);
+        } catch (playError) {
+          // Ignore AbortError as it's expected when quickly switching songs
+          if ((playError as Error).name !== 'AbortError') {
+            console.error('Error playing audio:', playError);
+          }
+        }
+      }, { once: true });
 
-    audio.play().then(() => {
-      if (currentSong) {
-        setHistoryStack(prev => [...prev, currentSong]);
-      }
-      setCurrentSong(song);
-      setIsPlaying(true);
-    }).catch(error => {
-      console.error('Error playing audio:', error);
-    });
+      audio.addEventListener('error', (e) => {
+        console.error('Audio loading error:', e);
+      });
+
+      audioRef.current = audio;
+      audio.src = song.url;
+      audio.load();
+    } catch (error) {
+      console.error('Error setting up audio:', error);
+    }
   }, [volume, currentSong]);
 
   const pause = useCallback(() => {
