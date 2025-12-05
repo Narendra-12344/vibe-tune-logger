@@ -7,6 +7,7 @@ import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { useToast } from '@/hooks/use-toast';
 import { useServiceWorker } from '@/hooks/useServiceWorker';
 import { SongSearchFilter } from '@/components/SongSearchFilter';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { Play, Pause, Trash2, Music2, ListPlus, Download, Clock, WifiOff, Wifi } from 'lucide-react';
 
 interface UserSong {
@@ -257,6 +258,12 @@ export const UserSongsList = ({ selectedMood }: UserSongsListProps) => {
                 </div>
               </div>
               <div className="flex items-center gap-1">
+                <FavoriteButton
+                  songId={song.id}
+                  title={song.title}
+                  artist={song.artist}
+                  moodId={song.mood_tags?.[0]}
+                />
                 <Button
                   variant="ghost"
                   size="icon"

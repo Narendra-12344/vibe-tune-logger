@@ -19,10 +19,12 @@ import { LyricsDisplay } from '@/components/LyricsDisplay';
 import { QueueManager } from '@/components/QueueManager';
 import { FolderUpload } from '@/components/FolderUpload';
 import { Equalizer } from '@/components/Equalizer';
+import { FavoritesList } from '@/components/FavoritesList';
 import { useMoodTheme } from '@/contexts/MoodThemeContext';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/lib/utils';
 
-type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder';
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder' | 'favorites';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('mood');
@@ -32,6 +34,9 @@ const Index = () => {
   const [userEmail, setUserEmail] = useState<string>('');
   const navigate = useNavigate();
   const { setCurrentMood, getMoodStyles } = useMoodTheme();
+  
+  // Enable keyboard shortcuts
+  useKeyboardShortcuts();
 
   // Update mood theme when mood is selected
   const handleMoodSelect = (mood: { id: string; label: string }) => {
@@ -109,6 +114,7 @@ const Index = () => {
               {activeModule === 'search' && <SongSearch />}
               {activeModule === 'stats' && <Statistics />}
               {activeModule === 'profile' && <UserProfile />}
+              {activeModule === 'favorites' && <FavoritesList />}
               {activeModule === 'upload' && (
                 <div className="w-full max-w-6xl mx-auto space-y-6">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
