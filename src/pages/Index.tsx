@@ -18,6 +18,7 @@ import { DragDropPlaylistBuilder } from '@/components/DragDropPlaylistBuilder';
 import { LyricsDisplay } from '@/components/LyricsDisplay';
 import { QueueManager } from '@/components/QueueManager';
 import { FolderUpload } from '@/components/FolderUpload';
+import { Equalizer } from '@/components/Equalizer';
 import { useMoodTheme } from '@/contexts/MoodThemeContext';
 import { cn } from '@/lib/utils';
 
@@ -94,6 +95,7 @@ const Index = () => {
                     <UserSongsList selectedMood={selectedMood?.id} />
                   </div>
                   <div className="xl:col-span-1 space-y-6">
+                    <Equalizer />
                     <LyricsDisplay />
                     <QueueManager />
                   </div>
