@@ -7,36 +7,22 @@ export interface TeluguSong {
   genre: string;
   audioPreviewUrl: string;
   matchReason: string;
+  lyrics?: string;
 }
 
-// Using different royalty-free audio samples for each song to ensure unique playback
-const audioUrls = [
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+// Using reliable public domain audio samples
+const reliableAudioUrls = [
+  'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
+  'https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-MP3-File.mp3',
+  'https://download.samplelib.com/mp3/sample-3s.mp3',
+  'https://download.samplelib.com/mp3/sample-6s.mp3',
+  'https://download.samplelib.com/mp3/sample-9s.mp3',
+  'https://download.samplelib.com/mp3/sample-12s.mp3',
+  'https://download.samplelib.com/mp3/sample-15s.mp3',
+  'https://codeskulptor-demos.commondatastorage.googleapis.com/descent/gotitem.mp3',
 ];
 
-let audioIndex = 0;
-const getNextAudioUrl = () => {
-  const url = audioUrls[audioIndex % audioUrls.length];
-  audioIndex++;
-  return url;
-};
-
-// Telugu songs only - organized by mood
+// Telugu songs organized by mood
 export const teluguMoodSongs: Record<string, TeluguSong[]> = {
   happy: [
     {
@@ -46,7 +32,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Ala Vaikunthapurramuloo',
       duration: '4:05',
       genre: 'Telugu Pop',
-      audioPreviewUrl: audioUrls[0],
+      audioPreviewUrl: reliableAudioUrls[0],
       matchReason: 'Uplifting Telugu melody with romantic vibes'
     },
     {
@@ -56,7 +42,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Ala Vaikunthapurramuloo',
       duration: '4:32',
       genre: 'Telugu Folk',
-      audioPreviewUrl: audioUrls[1],
+      audioPreviewUrl: reliableAudioUrls[1],
       matchReason: 'Energetic folk beats and celebration'
     },
     {
@@ -65,9 +51,9 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       artist: 'Sid Sriram',
       album: 'Ala Vaikunthapurramuloo',
       duration: '4:18',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: audioUrls[2],
-      matchReason: 'Soulful and joyful Telugu music'
+      genre: 'Telugu Classical',
+      audioPreviewUrl: reliableAudioUrls[2],
+      matchReason: 'Soulful and joyful Telugu classical music'
     },
     {
       id: 'tel-happy-4',
@@ -76,7 +62,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Geetha Govindam',
       duration: '3:54',
       genre: 'Telugu Romantic',
-      audioPreviewUrl: audioUrls[3],
+      audioPreviewUrl: reliableAudioUrls[3],
       matchReason: 'Sweet and cheerful Telugu melody'
     },
     {
@@ -86,7 +72,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Pushpa',
       duration: '3:58',
       genre: 'Telugu Folk Pop',
-      audioPreviewUrl: audioUrls[4],
+      audioPreviewUrl: reliableAudioUrls[4],
       matchReason: 'Catchy folk-infused joyful melody'
     },
     {
@@ -96,7 +82,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Geetha Govindam',
       duration: '4:02',
       genre: 'Telugu Dance',
-      audioPreviewUrl: audioUrls[5],
+      audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Playful and upbeat Telugu track'
     },
     {
@@ -106,7 +92,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Sarileru Neekevvaru',
       duration: '4:12',
       genre: 'Telugu Mass',
-      audioPreviewUrl: audioUrls[6],
+      audioPreviewUrl: reliableAudioUrls[6],
       matchReason: 'High-energy happy mass track'
     },
     {
@@ -116,8 +102,18 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Chalo',
       duration: '3:52',
       genre: 'Telugu Romantic',
-      audioPreviewUrl: audioUrls[7],
+      audioPreviewUrl: reliableAudioUrls[7],
       matchReason: 'Feel-good romantic melody'
+    },
+    {
+      id: 'tel-happy-9',
+      title: 'Rangamma Mangamma',
+      artist: 'MM Manasi',
+      album: 'Rangasthalam',
+      duration: '3:58',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: reliableAudioUrls[0],
+      matchReason: 'Pleasant folk melody'
     }
   ],
   excited: [
@@ -128,7 +124,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'RRR',
       duration: '4:45',
       genre: 'Telugu Dance',
-      audioPreviewUrl: audioUrls[8],
+      audioPreviewUrl: reliableAudioUrls[1],
       matchReason: 'Oscar-winning high-energy dance anthem'
     },
     {
@@ -138,7 +134,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'DJ',
       duration: '4:12',
       genre: 'Telugu Mass',
-      audioPreviewUrl: audioUrls[9],
+      audioPreviewUrl: reliableAudioUrls[2],
       matchReason: 'Explosive energy and mass appeal'
     },
     {
@@ -148,7 +144,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Arya 2',
       duration: '4:28',
       genre: 'Telugu Party',
-      audioPreviewUrl: audioUrls[10],
+      audioPreviewUrl: reliableAudioUrls[3],
       matchReason: 'Party anthem with exciting beats'
     },
     {
@@ -158,7 +154,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Pushpa',
       duration: '3:22',
       genre: 'Telugu Item',
-      audioPreviewUrl: audioUrls[11],
+      audioPreviewUrl: reliableAudioUrls[4],
       matchReason: 'Electrifying beats and catchy hook'
     },
     {
@@ -168,7 +164,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Bahubali 2',
       duration: '3:55',
       genre: 'Telugu Folk Fusion',
-      audioPreviewUrl: audioUrls[12],
+      audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Energetic folk fusion celebration'
     },
     {
@@ -178,7 +174,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Iddarammayilatho',
       duration: '4:15',
       genre: 'Telugu Dance',
-      audioPreviewUrl: audioUrls[13],
+      audioPreviewUrl: reliableAudioUrls[6],
       matchReason: 'High-octane dance number'
     },
     {
@@ -188,7 +184,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Rangasthalam',
       duration: '4:02',
       genre: 'Telugu Folk',
-      audioPreviewUrl: audioUrls[14],
+      audioPreviewUrl: reliableAudioUrls[7],
       matchReason: 'Foot-tapping folk beats'
     },
     {
@@ -198,7 +194,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Jai Lava Kusa',
       duration: '3:48',
       genre: 'Telugu Pop',
-      audioPreviewUrl: audioUrls[15],
+      audioPreviewUrl: reliableAudioUrls[0],
       matchReason: 'Peppy and uplifting dance track'
     }
   ],
@@ -210,7 +206,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Uppena',
       duration: '4:22',
       genre: 'Telugu Melody',
-      audioPreviewUrl: audioUrls[0],
+      audioPreviewUrl: reliableAudioUrls[1],
       matchReason: 'Serene and soothing Telugu vocals'
     },
     {
@@ -220,7 +216,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Fidaa',
       duration: '4:08',
       genre: 'Telugu Romantic',
-      audioPreviewUrl: audioUrls[1],
+      audioPreviewUrl: reliableAudioUrls[2],
       matchReason: 'Gentle and soothing melody'
     },
     {
@@ -230,7 +226,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'RX 100',
       duration: '3:52',
       genre: 'Telugu Melody',
-      audioPreviewUrl: audioUrls[2],
+      audioPreviewUrl: reliableAudioUrls[3],
       matchReason: 'Peaceful and dreamy composition'
     },
     {
@@ -240,37 +236,27 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Tholi Prema',
       duration: '4:25',
       genre: 'Telugu Soft',
-      audioPreviewUrl: audioUrls[3],
+      audioPreviewUrl: reliableAudioUrls[4],
       matchReason: 'Reflective and emotionally balanced'
     },
     {
       id: 'tel-calm-5',
-      title: 'Oka Praanam',
-      artist: 'Shreya Ghoshal',
-      album: 'Geethanjali',
-      duration: '4:45',
-      genre: 'Telugu Devotional',
-      audioPreviewUrl: audioUrls[4],
-      matchReason: 'Peaceful and melodious composition'
-    },
-    {
-      id: 'tel-calm-6',
       title: 'Nee Jathaga',
       artist: 'Haricharan',
       album: 'Yevadu',
       duration: '4:15',
       genre: 'Telugu Soft Rock',
-      audioPreviewUrl: audioUrls[5],
+      audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Relaxing with beautiful orchestration'
     },
     {
-      id: 'tel-calm-7',
+      id: 'tel-calm-6',
       title: 'Kallu Kallu',
       artist: 'Shaan',
       album: 'Athadu',
       duration: '4:05',
       genre: 'Telugu Soft',
-      audioPreviewUrl: audioUrls[6],
+      audioPreviewUrl: reliableAudioUrls[6],
       matchReason: 'Easy-going and relaxed feel'
     }
   ],
@@ -282,7 +268,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: '30 Rojullo Preminchadam Ela',
       duration: '4:35',
       genre: 'Telugu Melancholic',
-      audioPreviewUrl: audioUrls[7],
+      audioPreviewUrl: reliableAudioUrls[7],
       matchReason: 'Emotional depth and heartfelt vocals'
     },
     {
@@ -292,7 +278,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Ye Maaya Chesave',
       duration: '5:12',
       genre: 'Telugu Sad',
-      audioPreviewUrl: audioUrls[8],
+      audioPreviewUrl: reliableAudioUrls[0],
       matchReason: 'Deeply emotional and touching melody'
     },
     {
@@ -302,7 +288,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Janatha Garage',
       duration: '4:42',
       genre: 'Telugu Emotional',
-      audioPreviewUrl: audioUrls[9],
+      audioPreviewUrl: reliableAudioUrls[1],
       matchReason: 'Sorrowful and moving composition'
     },
     {
@@ -312,7 +298,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Mahanati',
       duration: '5:12',
       genre: 'Telugu Classical',
-      audioPreviewUrl: audioUrls[10],
+      audioPreviewUrl: reliableAudioUrls[2],
       matchReason: 'Deeply emotional classical piece'
     },
     {
@@ -322,27 +308,17 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Devadas',
       duration: '4:28',
       genre: 'Telugu Melancholic',
-      audioPreviewUrl: audioUrls[11],
+      audioPreviewUrl: reliableAudioUrls[3],
       matchReason: 'Heart-wrenching vocals and melody'
     },
     {
       id: 'tel-sad-6',
-      title: 'Nuvvunte Naa Jathagaa',
-      artist: 'Karthik',
-      album: 'Krishnarjuna Yudham',
-      duration: '4:28',
-      genre: 'Telugu Emotional',
-      audioPreviewUrl: audioUrls[12],
-      matchReason: 'Melancholic and introspective'
-    },
-    {
-      id: 'tel-sad-7',
       title: 'Maate Vinadhuga',
       artist: 'Sid Sriram',
       album: 'Taxiwaala',
       duration: '4:18',
       genre: 'Telugu Sad',
-      audioPreviewUrl: audioUrls[13],
+      audioPreviewUrl: reliableAudioUrls[4],
       matchReason: 'Touching and emotional rendition'
     }
   ],
@@ -354,7 +330,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Sarileru Neekevvaru',
       duration: '3:48',
       genre: 'Telugu Mass',
-      audioPreviewUrl: audioUrls[14],
+      audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Aggressive power and mass energy'
     },
     {
@@ -364,7 +340,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Dookudu',
       duration: '4:05',
       genre: 'Telugu Rock',
-      audioPreviewUrl: audioUrls[15],
+      audioPreviewUrl: reliableAudioUrls[6],
       matchReason: 'Intense and powerful Telugu beats'
     },
     {
@@ -374,7 +350,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Krack',
       duration: '3:55',
       genre: 'Telugu Action',
-      audioPreviewUrl: audioUrls[0],
+      audioPreviewUrl: reliableAudioUrls[7],
       matchReason: 'Raw power and fierce attitude'
     },
     {
@@ -384,7 +360,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Baahubali',
       duration: '4:15',
       genre: 'Telugu Mass',
-      audioPreviewUrl: audioUrls[1],
+      audioPreviewUrl: reliableAudioUrls[0],
       matchReason: 'Intense warrior anthem'
     },
     {
@@ -394,7 +370,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Janatha Garage',
       duration: '4:02',
       genre: 'Telugu Mass',
-      audioPreviewUrl: audioUrls[2],
+      audioPreviewUrl: reliableAudioUrls[1],
       matchReason: 'High-energy mass number'
     },
     {
@@ -404,7 +380,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Dammu',
       duration: '3:45',
       genre: 'Telugu Power',
-      audioPreviewUrl: audioUrls[3],
+      audioPreviewUrl: reliableAudioUrls[2],
       matchReason: 'Power-packed and intense'
     }
   ],
@@ -416,7 +392,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Majili',
       duration: '4:38',
       genre: 'Telugu Romantic',
-      audioPreviewUrl: audioUrls[4],
+      audioPreviewUrl: reliableAudioUrls[3],
       matchReason: 'Steady and thoughtful composition'
     },
     {
@@ -426,7 +402,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Saaho',
       duration: '4:22',
       genre: 'Telugu Melody',
-      audioPreviewUrl: audioUrls[5],
+      audioPreviewUrl: reliableAudioUrls[4],
       matchReason: 'Balanced and soothing'
     },
     {
@@ -436,7 +412,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Sammohanam',
       duration: '4:18',
       genre: 'Telugu Folk',
-      audioPreviewUrl: audioUrls[6],
+      audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Balanced folk melody with universal appeal'
     },
     {
@@ -446,7 +422,7 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Dasara',
       duration: '4:05',
       genre: 'Telugu Folk',
-      audioPreviewUrl: audioUrls[7],
+      audioPreviewUrl: reliableAudioUrls[6],
       matchReason: 'Moderate tempo folk number'
     },
     {
@@ -456,18 +432,168 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       album: 'Spyder',
       duration: '4:15',
       genre: 'Telugu Melody',
-      audioPreviewUrl: audioUrls[8],
+      audioPreviewUrl: reliableAudioUrls[7],
       matchReason: 'Easy-listening melodious track'
+    }
+  ],
+  // Additional categories
+  devotional: [
+    {
+      id: 'tel-devotional-1',
+      title: 'Om Namah Shivaya',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Shiva Stotras',
+      duration: '5:30',
+      genre: 'Telugu Devotional',
+      audioPreviewUrl: reliableAudioUrls[0],
+      matchReason: 'Sacred and spiritually uplifting'
     },
     {
-      id: 'tel-neutral-6',
-      title: 'Rangamma Mangamma',
-      artist: 'MM Manasi',
+      id: 'tel-devotional-2',
+      title: 'Govinda Govinda',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Annamayya',
+      duration: '4:45',
+      genre: 'Telugu Devotional',
+      audioPreviewUrl: reliableAudioUrls[1],
+      matchReason: 'Divine melody praising Lord Venkateswara'
+    },
+    {
+      id: 'tel-devotional-3',
+      title: 'Brahmam Okate',
+      artist: 'Ghantasala',
+      album: 'Devotional Songs',
+      duration: '6:12',
+      genre: 'Telugu Classical Devotional',
+      audioPreviewUrl: reliableAudioUrls[2],
+      matchReason: 'Classic devotional with philosophical depth'
+    },
+    {
+      id: 'tel-devotional-4',
+      title: 'Namo Venkatesaya',
+      artist: 'M.M. Keeravani',
+      album: 'Annamayya',
+      duration: '5:18',
+      genre: 'Telugu Devotional',
+      audioPreviewUrl: reliableAudioUrls[3],
+      matchReason: 'Devotional masterpiece'
+    },
+    {
+      id: 'tel-devotional-5',
+      title: 'Sri Venkatesam',
+      artist: 'K.J. Yesudas',
+      album: 'Tirumala Songs',
+      duration: '4:55',
+      genre: 'Telugu Devotional',
+      audioPreviewUrl: reliableAudioUrls[4],
+      matchReason: 'Blissful and divine'
+    }
+  ],
+  classical: [
+    {
+      id: 'tel-classical-1',
+      title: 'Samajavaragamana (Classical)',
+      artist: 'Sid Sriram',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '4:18',
+      genre: 'Telugu Classical Fusion',
+      audioPreviewUrl: reliableAudioUrls[5],
+      matchReason: 'Classical raaga with modern touch'
+    },
+    {
+      id: 'tel-classical-2',
+      title: 'Ksheerabdi Kanyakaku',
+      artist: 'Ghantasala',
+      album: 'Classical Telugu',
+      duration: '5:45',
+      genre: 'Telugu Classical',
+      audioPreviewUrl: reliableAudioUrls[6],
+      matchReason: 'Timeless classical melody'
+    },
+    {
+      id: 'tel-classical-3',
+      title: 'Ninne Pelladatha',
+      artist: 'S. Janaki',
+      album: 'Classical Hits',
+      duration: '4:52',
+      genre: 'Telugu Classical',
+      audioPreviewUrl: reliableAudioUrls[7],
+      matchReason: 'Beautiful classical composition'
+    },
+    {
+      id: 'tel-classical-4',
+      title: 'Tholi Valape',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Classics',
+      duration: '5:15',
+      genre: 'Telugu Classical',
+      audioPreviewUrl: reliableAudioUrls[0],
+      matchReason: 'Classic romantic melody'
+    }
+  ],
+  folk: [
+    {
+      id: 'tel-folk-1',
+      title: 'Rangasthalam Title Song',
+      artist: 'M.M. Keeravani',
+      album: 'Rangasthalam',
+      duration: '4:22',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: reliableAudioUrls[1],
+      matchReason: 'Authentic rural Telugu folk'
+    },
+    {
+      id: 'tel-folk-2',
+      title: 'Ranga Ranga Rangasthalaana',
+      artist: 'Devi Sri Prasad',
       album: 'Rangasthalam',
       duration: '3:58',
       genre: 'Telugu Folk',
-      audioPreviewUrl: audioUrls[9],
-      matchReason: 'Pleasant folk melody'
+      audioPreviewUrl: reliableAudioUrls[2],
+      matchReason: 'Energetic folk celebration'
+    },
+    {
+      id: 'tel-folk-3',
+      title: 'Jigelu Rani',
+      artist: 'Rahul Sipligunj',
+      album: 'Rangasthalam',
+      duration: '4:02',
+      genre: 'Telugu Folk Dance',
+      audioPreviewUrl: reliableAudioUrls[3],
+      matchReason: 'Foot-tapping folk beats'
+    },
+    {
+      id: 'tel-folk-4',
+      title: 'Kurchi Madathapetti',
+      artist: 'Sri Krishna',
+      album: 'Guntur Kaaram',
+      duration: '3:45',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: reliableAudioUrls[4],
+      matchReason: 'Trending folk number'
+    },
+    {
+      id: 'tel-folk-5',
+      title: 'Komuram Bheemudo',
+      artist: 'Kaala Bhairava',
+      album: 'RRR',
+      duration: '4:35',
+      genre: 'Telugu Folk',
+      audioPreviewUrl: reliableAudioUrls[5],
+      matchReason: 'Powerful folk anthem'
     }
   ]
+};
+
+// Category labels for UI display
+export const categoryLabels: Record<string, string> = {
+  happy: '😊 Happy',
+  excited: '🎉 Excited',
+  calm: '😌 Calm',
+  sad: '😢 Sad',
+  angry: '😠 Angry',
+  neutral: '😐 Neutral',
+  devotional: '🙏 Devotional',
+  classical: '🎵 Classical',
+  folk: '🎻 Folk'
 };
