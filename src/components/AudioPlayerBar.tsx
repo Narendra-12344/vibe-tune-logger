@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { AudioVisualizer } from '@/components/AudioVisualizer';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { PlaybackControls } from '@/components/PlaybackControls';
 import { 
   Play, 
   Pause, 
@@ -162,8 +163,11 @@ export const AudioPlayerBar = () => {
           </div>
         </div>
 
-        {/* Volume, Queue & Close */}
+        {/* Playback Controls, Volume, Queue & Close */}
         <div className="flex items-center gap-2 flex-1 justify-end">
+          {/* Playback Features: Sleep Timer, Speed, Crossfade */}
+          <PlaybackControls />
+          
           {/* Queue Button */}
           <Sheet>
             <SheetTrigger asChild>

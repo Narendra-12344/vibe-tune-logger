@@ -1,835 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Play, Pause, Heart, ExternalLink, RefreshCw, Search, Volume2, Share2, ListPlus } from 'lucide-react';
+import { Play, Pause, Heart, RefreshCw, Search, Share2, ListPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { ShareDialog } from '@/components/ShareDialog';
-
-interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  duration: string;
-  genre: string;
-  spotifyUrl?: string;
-  audioPreviewUrl?: string;
-  matchReason: string;
-}
-
-interface MoodSongs {
-  [key: string]: Song[];
-}
-
-const moodSongs: MoodSongs = {
-  happy: [
-    {
-      id: '1',
-      title: 'Good as Hell',
-      artist: 'Lizzo',
-      album: 'Cuz I Love You',
-      duration: '2:39',
-      genre: 'Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Upbeat tempo and positive lyrics'
-    },
-    {
-      id: '2',
-      title: 'Can\'t Stop the Feeling!',
-      artist: 'Justin Timberlake',
-      album: 'Trolls',
-      duration: '3:56',
-      genre: 'Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Feel-good energy and catchy rhythm'
-    },
-    {
-      id: '3',
-      title: 'Walking on Sunshine',
-      artist: 'Katrina and the Waves',
-      album: 'Walking on Sunshine',
-      duration: '3:59',
-      genre: 'New Wave',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Bright, optimistic sound'
-    },
-    {
-      id: '101',
-      title: 'Happy',
-      artist: 'Pharrell Williams',
-      album: 'G I R L',
-      duration: '3:53',
-      genre: 'Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Pure joy and infectious rhythm'
-    },
-    {
-      id: '102',
-      title: 'Shake It Off',
-      artist: 'Taylor Swift',
-      album: '1989',
-      duration: '3:39',
-      genre: 'Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Carefree attitude and danceable beat'
-    },
-    {
-      id: '103',
-      title: 'September',
-      artist: 'Earth, Wind & Fire',
-      album: 'The Best of Earth, Wind & Fire',
-      duration: '3:35',
-      genre: 'Funk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Celebratory and uplifting groove'
-    },
-    {
-      id: '104',
-      title: 'Uptown Funk',
-      artist: 'Mark Ronson ft. Bruno Mars',
-      album: 'Uptown Special',
-      duration: '4:30',
-      genre: 'Funk Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-      matchReason: 'High energy and feel-good vibes'
-    },
-    {
-      id: 'tel-happy-1',
-      title: 'Butta Bomma',
-      artist: 'Armaan Malik',
-      album: 'Ala Vaikunthapurramuloo',
-      duration: '4:05',
-      genre: 'Telugu Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Uplifting Telugu melody with romantic vibes'
-    },
-    {
-      id: 'tel-happy-2',
-      title: 'Ramuloo Ramulaa',
-      artist: 'Anurag Kulkarni, Mangli',
-      album: 'Ala Vaikunthapurramuloo',
-      duration: '4:32',
-      genre: 'Telugu Folk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Energetic folk beats and celebration'
-    },
-    {
-      id: 'tel-happy-3',
-      title: 'Samajavaragamana',
-      artist: 'Sid Sriram',
-      album: 'Ala Vaikunthapurramuloo',
-      duration: '4:18',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Soulful and joyful Telugu music'
-    },
-    {
-      id: 'tel-happy-4',
-      title: 'Inkem Inkem',
-      artist: 'Sid Sriram',
-      album: 'Geetha Govindam',
-      duration: '3:54',
-      genre: 'Telugu Romantic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Sweet and cheerful Telugu melody'
-    },
-    {
-      id: 'tel-happy-5',
-      title: 'Srivalli',
-      artist: 'Sid Sriram',
-      album: 'Pushpa',
-      duration: '3:58',
-      genre: 'Telugu Folk Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Catchy folk-infused joyful melody'
-    },
-    {
-      id: 'tel-happy-6',
-      title: 'Yenti Yenti',
-      artist: 'Chinmayi',
-      album: 'Geetha Govindam',
-      duration: '4:02',
-      genre: 'Telugu Dance',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Playful and upbeat Telugu track'
-    },
-    {
-      id: 'tel-happy-7',
-      title: 'Mind Block',
-      artist: 'Blaaze',
-      album: 'Sarileru Neekevvaru',
-      duration: '4:12',
-      genre: 'Telugu Mass',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-      matchReason: 'High-energy happy mass track'
-    }
-  ],
-  excited: [
-    {
-      id: '4',
-      title: 'Thunder',
-      artist: 'Imagine Dragons',
-      album: 'Evolve',
-      duration: '3:07',
-      genre: 'Pop Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-      matchReason: 'High energy and driving beat'
-    },
-    {
-      id: '5',
-      title: 'Pump It',
-      artist: 'Black Eyed Peas',
-      album: 'Monkey Business',
-      duration: '3:33',
-      genre: 'Hip Hop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-      matchReason: 'Explosive energy and party vibe'
-    },
-    {
-      id: '6',
-      title: 'Don\'t Stop Me Now',
-      artist: 'Queen',
-      album: 'Jazz',
-      duration: '3:29',
-      genre: 'Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
-      matchReason: 'Pure excitement and unstoppable energy'
-    },
-    {
-      id: '105',
-      title: 'Eye of the Tiger',
-      artist: 'Survivor',
-      album: 'Eye of the Tiger',
-      duration: '4:05',
-      genre: 'Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
-      matchReason: 'Motivating and adrenaline-pumping'
-    },
-    {
-      id: '106',
-      title: 'We Will Rock You',
-      artist: 'Queen',
-      album: 'News of the World',
-      duration: '2:02',
-      genre: 'Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
-      matchReason: 'Powerful and energizing anthem'
-    },
-    {
-      id: '107',
-      title: 'Levels',
-      artist: 'Avicii',
-      album: 'Levels',
-      duration: '3:18',
-      genre: 'EDM',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-      matchReason: 'Euphoric build-ups and electric energy'
-    },
-    {
-      id: '108',
-      title: 'Jump',
-      artist: 'Van Halen',
-      album: '1984',
-      duration: '4:04',
-      genre: 'Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
-      matchReason: 'High-octane excitement and joy'
-    },
-    {
-      id: 'tel-excited-1',
-      title: 'Buttabomma',
-      artist: 'Ram Miriyala',
-      album: 'Ala Vaikunthapurramuloo',
-      duration: '3:45',
-      genre: 'Telugu Dance',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'High-energy Telugu dance number'
-    },
-    {
-      id: 'tel-excited-2',
-      title: 'Seeti Maar',
-      artist: 'Devi Sri Prasad',
-      album: 'DJ',
-      duration: '4:12',
-      genre: 'Telugu Mass',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Explosive energy and mass appeal'
-    },
-    {
-      id: 'tel-excited-3',
-      title: 'Ringa Ringa',
-      artist: 'Rahul Nambiar, Suchitra',
-      album: 'Arya 2',
-      duration: '4:28',
-      genre: 'Telugu Party',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Party anthem with exciting beats'
-    },
-    {
-      id: 'tel-excited-4',
-      title: 'Dheemtanakka',
-      artist: 'Raghu Dixit, Priyadarshini',
-      album: 'Bahubali 2',
-      duration: '3:55',
-      genre: 'Telugu Folk Fusion',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Energetic folk fusion celebration'
-    },
-    {
-      id: 'tel-excited-5',
-      title: 'Oo Antava',
-      artist: 'Indravathi Chauhan',
-      album: 'Pushpa',
-      duration: '3:22',
-      genre: 'Telugu Item',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Electrifying beats and catchy hook'
-    },
-    {
-      id: 'tel-excited-6',
-      title: 'Naatu Naatu',
-      artist: 'Rahul Sipligunj, Kaala Bhairava',
-      album: 'RRR',
-      duration: '4:45',
-      genre: 'Telugu Dance',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Oscar-winning high-energy dance anthem'
-    },
-    {
-      id: 'tel-excited-7',
-      title: 'Jingunamani',
-      artist: 'Yogi B, Blaaze',
-      album: 'Jilla',
-      duration: '4:18',
-      genre: 'Telugu Hip-Hop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-      matchReason: 'Explosive hip-hop energy'
-    }
-  ],
-  calm: [
-    {
-      id: '7',
-      title: 'Weightless',
-      artist: 'Marconi Union',
-      album: 'Weightless',
-      duration: '8:10',
-      genre: 'Ambient',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Scientifically designed to reduce anxiety'
-    },
-    {
-      id: '8',
-      title: 'River',
-      artist: 'Leon Bridges',
-      album: 'Coming Home',
-      duration: '4:17',
-      genre: 'Soul',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Gentle vocals and peaceful melody'
-    },
-    {
-      id: '9',
-      title: 'Mad World',
-      artist: 'Gary Jules',
-      album: 'Trading Snakeoil for Wolftickets',
-      duration: '3:07',
-      genre: 'Alternative',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Contemplative and serene atmosphere'
-    },
-    {
-      id: '109',
-      title: 'Clair de Lune',
-      artist: 'Claude Debussy',
-      album: 'Suite Bergamasque',
-      duration: '5:00',
-      genre: 'Classical',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Soothing piano and peaceful ambiance'
-    },
-    {
-      id: '110',
-      title: 'Breathe Me',
-      artist: 'Sia',
-      album: 'Colour the Small One',
-      duration: '4:33',
-      genre: 'Alternative',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Soft, introspective, and calming'
-    },
-    {
-      id: '111',
-      title: 'Holocene',
-      artist: 'Bon Iver',
-      album: 'Bon Iver',
-      duration: '5:36',
-      genre: 'Indie Folk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Ethereal and meditative soundscape'
-    },
-    {
-      id: '112',
-      title: 'Stay',
-      artist: 'Rihanna ft. Mikky Ekko',
-      album: 'Unapologetic',
-      duration: '4:00',
-      genre: 'Pop',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-      matchReason: 'Gentle and emotionally soothing'
-    },
-    {
-      id: 'tel-calm-1',
-      title: 'Nee Kannu Neeli Samudram',
-      artist: 'Sid Sriram',
-      album: 'Uppena',
-      duration: '4:22',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Serene and soothing Telugu vocals'
-    },
-    {
-      id: 'tel-calm-2',
-      title: 'Oka Praanam',
-      artist: 'Shreya Ghoshal',
-      album: 'Geethanjali',
-      duration: '4:45',
-      genre: 'Telugu Romantic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Peaceful and melodious composition'
-    },
-    {
-      id: 'tel-calm-3',
-      title: 'Oohale',
-      artist: 'Anirudh Ravichander',
-      album: 'Darbar',
-      duration: '3:58',
-      genre: 'Telugu Soft',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Gentle and calming Telugu melody'
-    },
-    {
-      id: 'tel-calm-4',
-      title: 'Nee Jathaga',
-      artist: 'Haricharan',
-      album: 'Yevadu',
-      duration: '4:15',
-      genre: 'Telugu Soft Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Relaxing with beautiful orchestration'
-    },
-    {
-      id: 'tel-calm-5',
-      title: 'Vachinde',
-      artist: 'Chinmayi, Dhanunjay',
-      album: 'Fidaa',
-      duration: '4:08',
-      genre: 'Telugu Romantic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Gentle and soothing melody'
-    },
-    {
-      id: 'tel-calm-6',
-      title: 'Pillaa Raa',
-      artist: 'Sid Sriram',
-      album: 'RX 100',
-      duration: '3:52',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Peaceful and dreamy composition'
-    }
-  ],
-  sad: [
-    {
-      id: '10',
-      title: 'Someone Like You',
-      artist: 'Adele',
-      album: '21',
-      duration: '4:45',
-      genre: 'Soul',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-      matchReason: 'Emotional depth and cathartic release'
-    },
-    {
-      id: '11',
-      title: 'Hurt',
-      artist: 'Johnny Cash',
-      album: 'American IV: The Man Comes Around',
-      duration: '3:38',
-      genre: 'Country',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-      matchReason: 'Raw emotion and introspective lyrics'
-    },
-    {
-      id: '12',
-      title: 'Black',
-      artist: 'Pearl Jam',
-      album: 'Ten',
-      duration: '5:43',
-      genre: 'Grunge',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
-      matchReason: 'Melancholic melody and heartfelt vocals'
-    },
-    {
-      id: '113',
-      title: 'The Night We Met',
-      artist: 'Lord Huron',
-      album: 'Strange Trails',
-      duration: '3:28',
-      genre: 'Indie Folk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
-      matchReason: 'Nostalgic and deeply emotional'
-    },
-    {
-      id: '114',
-      title: 'Say Something',
-      artist: 'A Great Big World & Christina Aguilera',
-      album: 'Is There Anybody Out There?',
-      duration: '3:51',
-      genre: 'Pop Ballad',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
-      matchReason: 'Heartbreaking and vulnerable'
-    },
-    {
-      id: '115',
-      title: 'Tears in Heaven',
-      artist: 'Eric Clapton',
-      album: 'Unplugged',
-      duration: '4:32',
-      genre: 'Acoustic Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-      matchReason: 'Deeply moving and sorrowful'
-    },
-    {
-      id: '116',
-      title: 'Fix You',
-      artist: 'Coldplay',
-      album: 'X&Y',
-      duration: '4:54',
-      genre: 'Alternative Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
-      matchReason: 'Comforting yet melancholic'
-    },
-    {
-      id: 'tel-sad-1',
-      title: 'Neeli Neeli Aakasam',
-      artist: 'Sid Sriram',
-      album: '30 Rojullo Preminchadam Ela',
-      duration: '4:35',
-      genre: 'Telugu Melancholic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Emotional depth and heartfelt vocals'
-    },
-    {
-      id: 'tel-sad-2',
-      title: 'Yemaaya Chesave',
-      artist: 'Haricharan',
-      album: 'Ye Maaya Chesave',
-      duration: '5:12',
-      genre: 'Telugu Sad',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Deeply emotional and touching melody'
-    },
-    {
-      id: 'tel-sad-3',
-      title: 'Nuvvunte Naa Jathagaa',
-      artist: 'Karthik',
-      album: 'Krishnarjuna Yudham',
-      duration: '4:28',
-      genre: 'Telugu Emotional',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Melancholic and introspective'
-    },
-    {
-      id: 'tel-sad-4',
-      title: 'Pranaamam',
-      artist: 'Yazin Nizar',
-      album: 'Janatha Garage',
-      duration: '4:42',
-      genre: 'Telugu Emotional',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Sorrowful and moving composition'
-    },
-    {
-      id: 'tel-sad-5',
-      title: 'Kanulu Kanulanu Dochayante',
-      artist: 'Anurag Kulkarni',
-      album: 'Mahanati',
-      duration: '5:12',
-      genre: 'Telugu Classical',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Deeply emotional classical piece'
-    },
-    {
-      id: 'tel-sad-6',
-      title: 'Emo Emo',
-      artist: 'Sid Sriram',
-      album: 'Devadas',
-      duration: '4:28',
-      genre: 'Telugu Melancholic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Heart-wrenching vocals and melody'
-    }
-  ],
-  angry: [
-    {
-      id: '13',
-      title: 'Bodies',
-      artist: 'Drowning Pool',
-      album: 'Sinner',
-      duration: '3:22',
-      genre: 'Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Aggressive energy for emotional release'
-    },
-    {
-      id: '14',
-      title: 'Break Stuff',
-      artist: 'Limp Bizkit',
-      album: 'Significant Other',
-      duration: '2:47',
-      genre: 'Nu Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Raw anger and cathartic expression'
-    },
-    {
-      id: '15',
-      title: 'Killing in the Name',
-      artist: 'Rage Against the Machine',
-      album: 'Rage Against the Machine',
-      duration: '5:14',
-      genre: 'Rap Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Rebellious energy and powerful message'
-    },
-    {
-      id: '117',
-      title: 'Down with the Sickness',
-      artist: 'Disturbed',
-      album: 'The Sickness',
-      duration: '4:38',
-      genre: 'Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Intense aggression and power'
-    },
-    {
-      id: '118',
-      title: 'Last Resort',
-      artist: 'Papa Roach',
-      album: 'Infest',
-      duration: '3:20',
-      genre: 'Nu Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Frustrated energy and raw emotion'
-    },
-    {
-      id: '119',
-      title: 'Freak on a Leash',
-      artist: 'Korn',
-      album: 'Follow the Leader',
-      duration: '4:15',
-      genre: 'Nu Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Dark and aggressive release'
-    },
-    {
-      id: '120',
-      title: 'Chop Suey!',
-      artist: 'System of a Down',
-      album: 'Toxicity',
-      duration: '3:30',
-      genre: 'Alternative Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-      matchReason: 'Chaotic and cathartic energy'
-    },
-    {
-      id: 'tel-angry-1',
-      title: 'Blockbuster',
-      artist: 'Thaman S',
-      album: 'Sarileru Neekevvaru',
-      duration: '3:48',
-      genre: 'Telugu Mass',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Aggressive power and mass energy'
-    },
-    {
-      id: 'tel-angry-2',
-      title: 'Dhoom Dhaam',
-      artist: 'Benny Dayal',
-      album: 'Dookudu',
-      duration: '4:05',
-      genre: 'Telugu Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Intense and powerful Telugu beats'
-    },
-    {
-      id: 'tel-angry-3',
-      title: 'Oosaravelli',
-      artist: 'Yazin Nizar',
-      album: 'Oosaravelli',
-      duration: '4:22',
-      genre: 'Telugu Hard Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Dark and aggressive energy'
-    },
-    {
-      id: 'tel-angry-4',
-      title: 'Bullet',
-      artist: 'Thaman S',
-      album: 'Krack',
-      duration: '3:55',
-      genre: 'Telugu Action',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Raw power and fierce attitude'
-    },
-    {
-      id: 'tel-angry-5',
-      title: 'Dangamaari Oodhani',
-      artist: 'Anurag Kulkarni',
-      album: 'Baahubali',
-      duration: '4:15',
-      genre: 'Telugu Mass',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Intense warrior anthem'
-    },
-    {
-      id: 'tel-angry-6',
-      title: 'Jilla Jilla',
-      artist: 'Blaaze',
-      album: 'Jilla',
-      duration: '4:02',
-      genre: 'Telugu Hard',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Aggressive and powerful'
-    }
-  ],
-  neutral: [
-    {
-      id: '16',
-      title: 'Breathe',
-      artist: 'Pink Floyd',
-      album: 'The Dark Side of the Moon',
-      duration: '2:43',
-      genre: 'Progressive Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-      matchReason: 'Balanced and contemplative'
-    },
-    {
-      id: '17',
-      title: 'Everyday People',
-      artist: 'Sly & The Family Stone',
-      album: 'Stand!',
-      duration: '2:24',
-      genre: 'Funk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-      matchReason: 'Steady groove and universal appeal'
-    },
-    {
-      id: '18',
-      title: 'The Sound of Silence',
-      artist: 'Disturbed',
-      album: 'Immortalized',
-      duration: '4:08',
-      genre: 'Alternative Metal',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
-      matchReason: 'Reflective and emotionally balanced'
-    },
-    {
-      id: '121',
-      title: 'Life on Mars?',
-      artist: 'David Bowie',
-      album: 'Hunky Dory',
-      duration: '3:48',
-      genre: 'Art Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
-      matchReason: 'Thought-provoking and balanced'
-    },
-    {
-      id: '122',
-      title: 'Hotel California',
-      artist: 'Eagles',
-      album: 'Hotel California',
-      duration: '6:30',
-      genre: 'Rock',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3',
-      matchReason: 'Smooth and introspective'
-    },
-    {
-      id: '123',
-      title: 'Everything in Its Right Place',
-      artist: 'Radiohead',
-      album: 'Kid A',
-      duration: '4:11',
-      genre: 'Electronic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-      matchReason: 'Ambient and neutrally calming'
-    },
-    {
-      id: 'tel-neutral-1',
-      title: 'Vachadayyo Saami',
-      artist: 'Ananya, Sreerama Chandra',
-      album: 'Sammohanam',
-      duration: '4:18',
-      genre: 'Telugu Folk',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      matchReason: 'Balanced folk melody with universal appeal'
-    },
-    {
-      id: 'tel-neutral-2',
-      title: 'Choosi Chudangane',
-      artist: 'S. Thaman, Chinmayi',
-      album: 'Chalo',
-      duration: '3:52',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      matchReason: 'Moderate tempo and contemplative'
-    },
-    {
-      id: 'tel-neutral-3',
-      title: 'Ninnila',
-      artist: 'Sid Sriram',
-      album: 'Tholi Prema',
-      duration: '4:25',
-      genre: 'Telugu Soft',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      matchReason: 'Reflective and emotionally balanced'
-    },
-    {
-      id: 'tel-neutral-4',
-      title: 'Priyathama Priyathama',
-      artist: 'Sid Sriram',
-      album: 'Majili',
-      duration: '4:38',
-      genre: 'Telugu Romantic',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      matchReason: 'Steady and thoughtful composition'
-    },
-    {
-      id: 'tel-neutral-5',
-      title: 'Kallu Kallu',
-      artist: 'Shaan',
-      album: 'Athadu',
-      duration: '4:05',
-      genre: 'Telugu Soft',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      matchReason: 'Easy-going and relaxed feel'
-    },
-    {
-      id: 'tel-neutral-6',
-      title: 'Yemaindo Telidu',
-      artist: 'Sid Sriram',
-      album: 'Saaho',
-      duration: '4:22',
-      genre: 'Telugu Melody',
-      audioPreviewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-      matchReason: 'Balanced and soothing'
-    }
-  ]
-};
+import { teluguMoodSongs, TeluguSong } from '@/data/teluguSongs';
 
 interface SongRecommenderProps {
   selectedMood?: { id: string; label: string } | null;
@@ -838,7 +18,7 @@ interface SongRecommenderProps {
 }
 
 export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: SongRecommenderProps) => {
-  const [currentSongs, setCurrentSongs] = useState<Song[]>([]);
+  const [currentSongs, setCurrentSongs] = useState<TeluguSong[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [likedSongsSet, setLikedSongsSet] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
@@ -880,13 +60,13 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
     
     // Simulate API call delay
     setTimeout(() => {
-      const songsForMood = moodSongs[selectedMood.id] || moodSongs.neutral;
+      const songsForMood = teluguMoodSongs[selectedMood.id] || teluguMoodSongs.neutral;
       setCurrentSongs(songsForMood);
       setIsGenerating(false);
       
       toast({
         title: "Songs generated!",
-        description: `Found ${songsForMood.length} songs for your ${selectedMood.label} mood.`
+        description: `Found ${songsForMood.length} Telugu songs for your ${selectedMood.label} mood.`
       });
     }, 1500);
   };
@@ -950,7 +130,7 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
     }
   };
 
-  const playSong = async (song: Song) => {
+  const playSong = async (song: TeluguSong) => {
     // If clicking the same song that's playing, toggle pause/play
     if (currentSong?.id === song.id) {
       if (isPlaying) {
@@ -994,10 +174,10 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
       <Card className="shadow-card">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent flex items-center justify-center gap-2">
-            🎵 Song Recommender 🎧
+            🎵 Telugu Song Recommender 🎧
           </CardTitle>
           <CardDescription>
-            🎶 Get personalized music recommendations based on your current mood ✨
+            🎶 Get personalized Telugu music recommendations based on your current mood ✨
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -1016,7 +196,7 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
               ) : (
                 <>
                   <Play className="mr-2 h-4 w-4" />
-                  🎧 Generate Recommendations
+                  🎧 Generate Telugu Songs
                 </>
               )}
             </Button>
@@ -1041,119 +221,113 @@ export const SongRecommender = ({ selectedMood, likedSongs, setLikedSongs }: Son
             <div className="space-y-4">
               <div className="flex flex-col gap-4">
                 <h3 className="text-lg font-semibold text-center">
-                  🎼 Recommended for you 🎸
+                  🎼 Telugu Songs for you 🎸
                 </h3>
                 
                 {/* Search bar */}
-                <div className="relative">
+                <div className="relative max-w-md mx-auto w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    type="text"
-                    placeholder="Search songs, artists, genres..."
+                    placeholder="Search Telugu songs..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
                   />
                 </div>
-                
-                {filteredSongs.length === 0 && searchQuery && (
-                  <p className="text-center text-muted-foreground">
-                    🔍 No songs found matching "{searchQuery}"
-                  </p>
-                )}
               </div>
               
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {filteredSongs.map((song) => (
-                  <Card key={song.id} className="group hover:shadow-mood transition-all duration-300 hover:scale-105">
+                  <Card key={song.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                     <CardContent className="p-4 space-y-3">
-                      <div className="space-y-1">
-                        <h4 className="font-semibold text-sm line-clamp-1 flex items-center gap-1">
-                          🎵 {song.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground line-clamp-1 flex items-center gap-1">
-                          🎤 {song.artist}
-                        </p>
-                        <p className="text-xs text-muted-foreground line-clamp-1 flex items-center gap-1">
-                          💿 {song.album}
-                        </p>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold truncate flex items-center gap-1">
+                            🎵 {song.title}
+                          </h4>
+                          <p className="text-sm text-muted-foreground truncate flex items-center gap-1">
+                            🎤 {song.artist}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
+                            💿 {song.album}
+                          </p>
+                        </div>
                       </div>
-
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">⏱️ {song.duration}</span>
-                        <Badge variant="outline" className="text-xs flex items-center gap-1">
+                      
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>⏱️ {song.duration}</span>
+                        <Badge variant="outline" className="text-xs">
                           🎸 {song.genre}
                         </Badge>
                       </div>
-
-                      <p className="text-xs text-muted-foreground italic flex items-start gap-1">
-                        <span>💡</span>
-                        <span>{song.matchReason}</span>
+                      
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        💡 {song.matchReason}
                       </p>
-
-                      <div className="flex items-center gap-2 pt-2 flex-wrap">
-                        <Button 
-                          size="sm" 
-                          variant={currentSong?.id === song.id && isPlaying ? "default" : "outline"}
+                      
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => playSong(song)}
                           className="flex-1"
                         >
                           {currentSong?.id === song.id && isPlaying ? (
                             <>
-                              <Pause className="h-3 w-3 mr-1" />
+                              <Pause className="h-4 w-4 mr-1" />
                               Pause
                             </>
                           ) : (
                             <>
-                              <Play className="h-3 w-3 mr-1" />
+                              <Play className="h-4 w-4 mr-1" />
                               Play
                             </>
                           )}
                         </Button>
+                        
                         <Button
-                          size="sm"
-                          variant="outline"
+                          variant="ghost"
+                          size="icon"
                           onClick={() => {
-                            if (song.audioPreviewUrl) {
-                              addToQueue({
-                                id: song.id,
-                                title: song.title,
-                                artist: song.artist,
-                                url: song.audioPreviewUrl,
-                                mood: selectedMood?.id
-                              });
-                              sonnerToast.success(`Added "${song.title}" to queue`);
-                            }
+                            addToQueue({
+                              id: song.id,
+                              title: song.title,
+                              artist: song.artist,
+                              url: song.audioPreviewUrl,
+                              mood: selectedMood?.id,
+                            });
+                            sonnerToast.success('Added to queue');
                           }}
                           title="Add to queue"
                         >
-                          <ListPlus className="h-3 w-3" />
+                          <ListPlus className="h-4 w-4" />
                         </Button>
+                        
                         <Button
-                          size="sm"
-                          variant="outline"
+                          variant="ghost"
+                          size="icon"
                           onClick={() => toggleLike(song.id)}
-                          className={likedSongsSet.has(song.id) ? 'text-red-500 border-red-500' : ''}
+                          className={likedSongsSet.has(song.id) ? 'text-red-500' : ''}
                         >
-                          <Heart className={`h-3 w-3 ${likedSongsSet.has(song.id) ? 'fill-current' : ''}`} />
+                          <Heart className={`h-4 w-4 ${likedSongsSet.has(song.id) ? 'fill-current' : ''}`} />
                         </Button>
+                        
                         <ShareDialog title={song.title} artist={song.artist} type="song">
-                          <Button size="sm" variant="outline">
-                            <Share2 className="h-3 w-3" />
+                          <Button variant="ghost" size="icon">
+                            <Share2 className="h-4 w-4" />
                           </Button>
                         </ShareDialog>
-                        {song.spotifyUrl && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={song.spotifyUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="h-3 w-3" />
-                            </a>
-                          </Button>
-                        )}
                       </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
+
+              {filteredSongs.length === 0 && searchQuery && (
+                <p className="text-center text-muted-foreground py-4">
+                  No Telugu songs found matching "{searchQuery}"
+                </p>
+              )}
             </div>
           )}
         </CardContent>
