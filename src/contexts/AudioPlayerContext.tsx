@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useRef, useCallback, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export interface Song {
   id: string;
@@ -51,43 +52,84 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [shuffle, setShuffle] = useState(false);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>('off');
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isLoadingRef = useRef(false);
 
   const playInternal = useCallback(async (song: Song) => {
+    // Prevent multiple simultaneous play attempts
+    if (isLoadingRef.current) return;
+    isLoadingRef.current = true;
+
+    // Clean up previous audio
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.src = '';
+      audioRef.current.removeAttribute('src');
+      audioRef.current.load();
       audioRef.current = null;
     }
 
     try {
       const audio = new Audio();
       audio.volume = volume;
-      audio.preload = 'auto';
-      
-      audio.addEventListener('canplaythrough', async () => {
+      audio.crossOrigin = 'anonymous';
+      audioRef.current = audio;
+
+      // Set up event listeners before loading
+      const handleCanPlay = async () => {
         try {
           await audio.play();
-          if (currentSong) {
+          if (currentSong && currentSong.id !== song.id) {
             setHistoryStack(prev => [...prev, currentSong]);
           }
           setCurrentSong(song);
           setIsPlaying(true);
+          isLoadingRef.current = false;
         } catch (playError) {
           if ((playError as Error).name !== 'AbortError') {
-            console.error('Error playing audio:', playError);
+            console.error('Playback failed:', playError);
+            toast.error('Failed to play song. Please try again.');
           }
+          isLoadingRef.current = false;
         }
-      }, { once: true });
+      };
 
-      audio.addEventListener('error', (e) => {
-        console.error('Audio loading error:', e);
-      });
+      const handleError = () => {
+        console.error('Audio load error for:', song.title);
+        toast.error(`Unable to load "${song.title}". The audio source may be unavailable.`);
+        isLoadingRef.current = false;
+        setIsPlaying(false);
+      };
 
-      audioRef.current = audio;
+      const handleLoadedMetadata = () => {
+        setDuration(audio.duration || 0);
+      };
+
+      const handleTimeUpdate = () => {
+        setCurrentTime(audio.currentTime);
+      };
+
+      audio.addEventListener('canplaythrough', handleCanPlay, { once: true });
+      audio.addEventListener('error', handleError, { once: true });
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+
+      // Start loading
       audio.src = song.url;
       audio.load();
+
+      // Timeout fallback
+      setTimeout(() => {
+        if (isLoadingRef.current) {
+          isLoadingRef.current = false;
+          if (!audio.readyState) {
+            toast.error('Song is taking too long to load. Please try another.');
+          }
+        }
+      }, 10000);
+
     } catch (error) {
       console.error('Error setting up audio:', error);
+      toast.error('Failed to initialize audio player');
+      isLoadingRef.current = false;
     }
   }, [volume, currentSong]);
 
@@ -122,16 +164,9 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
     audio.addEventListener('ended', handleSongEnded);
 
     return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleSongEnded);
     };
   }, [handleSongEnded]);
@@ -151,7 +186,11 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (audioRef.current) {
       audioRef.current.play().then(() => {
         setIsPlaying(true);
-      }).catch(console.error);
+      }).catch((e) => {
+        if (e.name !== 'AbortError') {
+          toast.error('Failed to resume playback');
+        }
+      });
     }
   }, []);
 
@@ -159,10 +198,11 @@ export const AudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-      setCurrentSong(null);
-      setCurrentTime(0);
     }
+    setIsPlaying(false);
+    setCurrentSong(null);
+    setCurrentTime(0);
+    setDuration(0);
   }, []);
 
   const setVolume = useCallback((newVolume: number) => {
