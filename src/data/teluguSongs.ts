@@ -10,16 +10,16 @@ export interface TeluguSong {
   lyrics?: string;
 }
 
-// Using reliable public domain audio samples
+// Using Internet Archive public domain audio - highly reliable CORS-enabled sources
 const reliableAudioUrls = [
-  'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
-  'https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-MP3-File.mp3',
-  'https://download.samplelib.com/mp3/sample-3s.mp3',
-  'https://download.samplelib.com/mp3/sample-6s.mp3',
-  'https://download.samplelib.com/mp3/sample-9s.mp3',
-  'https://download.samplelib.com/mp3/sample-12s.mp3',
-  'https://download.samplelib.com/mp3/sample-15s.mp3',
-  'https://codeskulptor-demos.commondatastorage.googleapis.com/descent/gotitem.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_01.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_02.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_03.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_04.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_05.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_06.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_07.mp3',
+  'https://archive.org/download/Classical_Music_Box/Classical_Music_Box_08.mp3',
 ];
 
 // Telugu songs organized by mood
