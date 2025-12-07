@@ -36,7 +36,8 @@ import {
   Upload,
   MoreVertical,
   LogOut,
-  Settings
+  Settings,
+  Radio
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { toast } from 'sonner';
@@ -65,6 +66,7 @@ export function AppSidebar({ activeModule, setActiveModule, userEmail }: AppSide
   const menuItems = [
     { id: 'mood', icon: Heart, label: '😊 Mood', emoji: '😊' },
     { id: 'songs', icon: Music, label: '🎵 Songs', emoji: '🎵' },
+    { id: 'streaming', icon: Radio, label: '📻 JioSaavn', emoji: '📻' },
     { id: 'favorites', icon: Heart, label: '❤️ Favorites', emoji: '❤️' },
     { id: 'preferences', icon: Brain, label: '🧠 Learn', emoji: '🧠' },
     { id: 'history', icon: Calendar, label: '📊 History', emoji: '📊' },
