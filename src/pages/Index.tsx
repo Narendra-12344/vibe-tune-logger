@@ -15,17 +15,19 @@ import { UserSongsList } from '@/components/UserSongsList';
 import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DragDropPlaylistBuilder } from '@/components/DragDropPlaylistBuilder';
-import { LyricsDisplay } from '@/components/LyricsDisplay';
+import { SyncedLyricsDisplay } from '@/components/SyncedLyricsDisplay';
 import { QueueManager } from '@/components/QueueManager';
 import { FolderUpload } from '@/components/FolderUpload';
 import { Equalizer } from '@/components/Equalizer';
 import { FavoritesList } from '@/components/FavoritesList';
 import { JioSaavnSearch } from '@/components/JioSaavnSearch';
+import { AIRecommendations } from '@/components/AIRecommendations';
+import { OfflineManager } from '@/components/OfflineManager';
 import { useMoodTheme } from '@/contexts/MoodThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/lib/utils';
 
-type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder' | 'favorites' | 'streaming';
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder' | 'favorites' | 'streaming' | 'ai-recommendations' | 'offline';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('mood');
@@ -102,7 +104,7 @@ const Index = () => {
                   </div>
                   <div className="xl:col-span-1 space-y-6">
                     <Equalizer />
-                    <LyricsDisplay />
+                    <SyncedLyricsDisplay />
                     <QueueManager />
                   </div>
                 </div>
@@ -117,6 +119,10 @@ const Index = () => {
               {activeModule === 'profile' && <UserProfile />}
               {activeModule === 'favorites' && <FavoritesList />}
               {activeModule === 'streaming' && <JioSaavnSearch />}
+              {activeModule === 'ai-recommendations' && (
+                <AIRecommendations currentMood={selectedMood?.id} listeningHistory={likedSongs} />
+              )}
+              {activeModule === 'offline' && <OfflineManager />}
               {activeModule === 'upload' && (
                 <div className="w-full max-w-6xl mx-auto space-y-6">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
