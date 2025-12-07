@@ -582,6 +582,172 @@ export const teluguMoodSongs: Record<string, TeluguSong[]> = {
       audioPreviewUrl: reliableAudioUrls[5],
       matchReason: 'Powerful folk anthem'
     }
+  ],
+  item: [
+    {
+      id: 'tel-item-1',
+      title: 'Oo Antava',
+      artist: 'Indravathi Chauhan',
+      album: 'Pushpa',
+      duration: '3:22',
+      genre: 'Telugu Item',
+      audioPreviewUrl: reliableAudioUrls[0],
+      matchReason: 'Trending item song with catchy beats'
+    },
+    {
+      id: 'tel-item-2',
+      title: 'Ringa Ringa',
+      artist: 'Suchitra',
+      album: 'Arya 2',
+      duration: '4:28',
+      genre: 'Telugu Item',
+      audioPreviewUrl: reliableAudioUrls[1],
+      matchReason: 'Classic party anthem'
+    },
+    {
+      id: 'tel-item-3',
+      title: 'Jigelu Rani',
+      artist: 'Shilpa Rao',
+      album: 'Rangasthalam',
+      duration: '4:02',
+      genre: 'Telugu Item',
+      audioPreviewUrl: reliableAudioUrls[2],
+      matchReason: 'Foot-tapping folk item number'
+    },
+    {
+      id: 'tel-item-4',
+      title: 'Deo Deo',
+      artist: 'Manasi, Ranina Reddy',
+      album: 'PSV Garuda Vega',
+      duration: '3:45',
+      genre: 'Telugu Item',
+      audioPreviewUrl: reliableAudioUrls[3],
+      matchReason: 'High-energy dance number'
+    },
+    {
+      id: 'tel-item-5',
+      title: 'Hamsa Naava',
+      artist: 'Yazin Nizar, Pranavi',
+      album: 'Bahubali 2',
+      duration: '3:58',
+      genre: 'Telugu Item',
+      audioPreviewUrl: reliableAudioUrls[4],
+      matchReason: 'Grand visual spectacle song'
+    }
+  ],
+  duets: [
+    {
+      id: 'tel-duet-1',
+      title: 'Vachinde',
+      artist: 'Chinmayi, Dhanunjay',
+      album: 'Fidaa',
+      duration: '4:08',
+      genre: 'Telugu Romantic Duet',
+      audioPreviewUrl: reliableAudioUrls[5],
+      matchReason: 'Beautiful romantic duet'
+    },
+    {
+      id: 'tel-duet-2',
+      title: 'Choosi Chudangane',
+      artist: 'Thaman, Chinmayi',
+      album: 'Chalo',
+      duration: '3:52',
+      genre: 'Telugu Romantic Duet',
+      audioPreviewUrl: reliableAudioUrls[6],
+      matchReason: 'Sweet and melodious duet'
+    },
+    {
+      id: 'tel-duet-3',
+      title: 'Undiporaadhey',
+      artist: 'Sid Sriram, Shreya Ghoshal',
+      album: 'Hushaaru',
+      duration: '4:25',
+      genre: 'Telugu Romantic Duet',
+      audioPreviewUrl: reliableAudioUrls[7],
+      matchReason: 'Soulful romantic melody'
+    },
+    {
+      id: 'tel-duet-4',
+      title: 'Samajavaragamana',
+      artist: 'Sid Sriram',
+      album: 'Ala Vaikunthapurramuloo',
+      duration: '4:18',
+      genre: 'Telugu Classical Duet',
+      audioPreviewUrl: reliableAudioUrls[0],
+      matchReason: 'Classical romantic piece'
+    },
+    {
+      id: 'tel-duet-5',
+      title: 'Pilla Nee Venakaley',
+      artist: 'Sid Sriram, Rita',
+      album: 'RX 100',
+      duration: '3:55',
+      genre: 'Telugu Romantic Duet',
+      audioPreviewUrl: reliableAudioUrls[1],
+      matchReason: 'Passionate love song'
+    }
+  ],
+  nineties: [
+    {
+      id: 'tel-90s-1',
+      title: 'Mukkala Mukabula',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Premikudu',
+      duration: '5:15',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[2],
+      matchReason: 'Iconic 90s dance number'
+    },
+    {
+      id: 'tel-90s-2',
+      title: 'Pellichesukundam',
+      artist: 'S.P. Balasubrahmanyam, Chitra',
+      album: 'Pellichesukundam',
+      duration: '4:42',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[3],
+      matchReason: 'Evergreen wedding song'
+    },
+    {
+      id: 'tel-90s-3',
+      title: 'Chandamama',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Bombay',
+      duration: '4:55',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[4],
+      matchReason: 'Nostalgic melody'
+    },
+    {
+      id: 'tel-90s-4',
+      title: 'Anandham Anandham',
+      artist: 'Hariharan',
+      album: 'Murari',
+      duration: '4:38',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[5],
+      matchReason: 'Feel-good classic'
+    },
+    {
+      id: 'tel-90s-5',
+      title: 'Ennenno Janmala',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Preminchukundam Raa',
+      duration: '5:02',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[6],
+      matchReason: 'Timeless romantic classic'
+    },
+    {
+      id: 'tel-90s-6',
+      title: 'Malli Malli',
+      artist: 'S.P. Balasubrahmanyam',
+      album: 'Premikudu',
+      duration: '4:45',
+      genre: 'Telugu 90s Classic',
+      audioPreviewUrl: reliableAudioUrls[7],
+      matchReason: 'Beautiful 90s melody'
+    }
   ]
 };
 
@@ -595,5 +761,8 @@ export const categoryLabels: Record<string, string> = {
   neutral: '😐 Neutral',
   devotional: '🙏 Devotional',
   classical: '🎵 Classical',
-  folk: '🎻 Folk'
+  folk: '🎻 Folk',
+  item: '💃 Item Songs',
+  duets: '💑 Duets',
+  nineties: '📼 90s Classics'
 };

@@ -20,11 +20,12 @@ import { QueueManager } from '@/components/QueueManager';
 import { FolderUpload } from '@/components/FolderUpload';
 import { Equalizer } from '@/components/Equalizer';
 import { FavoritesList } from '@/components/FavoritesList';
+import { JioSaavnSearch } from '@/components/JioSaavnSearch';
 import { useMoodTheme } from '@/contexts/MoodThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/lib/utils';
 
-type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder' | 'favorites';
+type ModuleType = 'mood' | 'songs' | 'preferences' | 'history' | 'journal' | 'playlists' | 'profile' | 'search' | 'stats' | 'upload' | 'playlist-builder' | 'favorites' | 'streaming';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('mood');
@@ -115,6 +116,7 @@ const Index = () => {
               {activeModule === 'stats' && <Statistics />}
               {activeModule === 'profile' && <UserProfile />}
               {activeModule === 'favorites' && <FavoritesList />}
+              {activeModule === 'streaming' && <JioSaavnSearch />}
               {activeModule === 'upload' && (
                 <div className="w-full max-w-6xl mx-auto space-y-6">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
